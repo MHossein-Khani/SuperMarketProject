@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32414.318
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D25CEE3A-1DEC-44E2-B4D9-C2AAFBBB8147}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FBF9A0F1-24BF-47DD-BE7B-E9281DA87DCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperMarket.Entities", "SuperMarket.Entities\SuperMarket.Entities.csproj", "{97E83C27-7F80-4510-9BE8-9A7AFC6B1532}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{97E83C27-7F80-4510-9BE8-9A7AFC6B1532}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97E83C27-7F80-4510-9BE8-9A7AFC6B1532}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97E83C27-7F80-4510-9BE8-9A7AFC6B1532}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97E83C27-7F80-4510-9BE8-9A7AFC6B1532}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{97E83C27-7F80-4510-9BE8-9A7AFC6B1532} = {D25CEE3A-1DEC-44E2-B4D9-C2AAFBBB8147}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BA9AA6EF-0F3B-4F85-BAA3-F1DCB235B01A}
+	EndGlobalSection
+EndGlobal
