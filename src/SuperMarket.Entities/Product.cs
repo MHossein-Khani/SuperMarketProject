@@ -12,7 +12,7 @@ namespace SuperMarket.Entities
         public Product()
         {
             SalesInvoices = new List<SalesInvoice>();
-            EntryDocuments = new List<EntryDocument>();
+            PurchaseInvoices = new List<PurchaseInvoice>();
         }
 
         public int Id { get; set; }
@@ -27,6 +27,6 @@ namespace SuperMarket.Entities
 
         public List<SalesInvoice> SalesInvoices { get; set; }
 
-        public List<EntryDocument> EntryDocuments { get; set; }
+        public List<PurchaseInvoice> PurchaseInvoices { get; set; }
     }
 }
