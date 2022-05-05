@@ -9,7 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FBF9A0F1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperMarket.Entities", "SuperMarket.Entities\SuperMarket.Entities.csproj", "{97E83C27-7F80-4510-9BE8-9A7AFC6B1532}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperMarket.Migrations", "SuperMarket.Migrations\SuperMarket.Migrations.csproj", "{BC2E4FCD-19B9-4F3F-9A5F-F2E093B33402}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuperMarket.Migrations", "SuperMarket.Migrations\SuperMarket.Migrations.csproj", "{BC2E4FCD-19B9-4F3F-9A5F-F2E093B33402}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperMarket.Infrastructure", "SuperMarket.Infrastructure\SuperMarket.Infrastructure.csproj", "{A38A6055-B787-4B62-8280-2B94C5E5DBC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		{BC2E4FCD-19B9-4F3F-9A5F-F2E093B33402}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC2E4FCD-19B9-4F3F-9A5F-F2E093B33402}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC2E4FCD-19B9-4F3F-9A5F-F2E093B33402}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A38A6055-B787-4B62-8280-2B94C5E5DBC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A38A6055-B787-4B62-8280-2B94C5E5DBC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A38A6055-B787-4B62-8280-2B94C5E5DBC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A38A6055-B787-4B62-8280-2B94C5E5DBC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{97E83C27-7F80-4510-9BE8-9A7AFC6B1532} = {D25CEE3A-1DEC-44E2-B4D9-C2AAFBBB8147}
 		{BC2E4FCD-19B9-4F3F-9A5F-F2E093B33402} = {D25CEE3A-1DEC-44E2-B4D9-C2AAFBBB8147}
+		{A38A6055-B787-4B62-8280-2B94C5E5DBC7} = {D25CEE3A-1DEC-44E2-B4D9-C2AAFBBB8147}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BA9AA6EF-0F3B-4F85-BAA3-F1DCB235B01A}
