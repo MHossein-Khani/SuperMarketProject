@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SuperMarket.Entities
 {
-    public class EntryDocument
+    public class PurchaseInvoice
     {
         public int Id { get; set; }
         public string CodeOfProduct { get; set; }
