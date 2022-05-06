@@ -18,7 +18,7 @@ namespace SuperMarket.Specs.Infrastructure
         {
             var settings = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appSettings.json", optional: true, reloadOnChange: false)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
                 .AddEnvironmentVariables()
                 .AddCommandLine(Environment.GetCommandLineArgs())
                 .Build();

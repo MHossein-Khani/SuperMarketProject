@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace SuperMarket.Services.Categories.Contracts
 {
-    public interface CategoryService
+    public class AddCategoryDto
     {
-        void Add(AddCategoryDto dto);
+        public string Name { get; set; }
     }
 }
