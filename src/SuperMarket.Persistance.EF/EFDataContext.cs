@@ -1,16 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SuperMarket.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SuperMarket.Persistance.EF.Categories;
 
 namespace SuperMarket.Persistance.EF
 {
-    public class ApplicationDbContext : DbContext
+    public class EFDataContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions options) : base(options)
+        public EFDataContext(string connectionString) :
+           this(new DbContextOptionsBuilder().UseSqlServer(connectionString).Options)
+        { }
+
+        public EFDataContext(DbContextOptions options) : base(options)
         {
 
         }
@@ -19,7 +19,7 @@ namespace SuperMarket.Persistance.EF
         {
             base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly
-                (typeof(ApplicationDbContext).Assembly);
+                (typeof(CategoryEntityMap).Assembly);
         }
 
         public DbSet<Category> Categories { get; set; }

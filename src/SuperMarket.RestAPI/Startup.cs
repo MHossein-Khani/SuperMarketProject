@@ -31,7 +31,7 @@ namespace SuperMarket.RestAPI
 
             services.AddControllers();
 
-            services.AddDbContext<ApplicationDbContext>
+            services.AddDbContext<EFDataContext>
                 (_ => _.UseSqlServer(Configuration["ConnectionString"]));
 
             services.AddSwaggerGen(c =>
