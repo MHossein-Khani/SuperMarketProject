@@ -21,5 +21,10 @@ namespace SuperMarket.Persistance.EF.Categories
         {
             _dataContext.Add(category);
         }
+
+        public bool IsCategoryNameExist(string name)
+        {
+           return _dataContext.Categories.Any(p => p.Name == name);
+        }
     }
 }

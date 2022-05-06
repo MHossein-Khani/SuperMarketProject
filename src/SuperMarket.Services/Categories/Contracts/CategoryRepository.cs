@@ -10,5 +10,6 @@ namespace SuperMarket.Services.Categories.Contracts
     public interface CategoryRepository
     {
         void Add(Category category);
+        bool IsCategoryNameExist(string name);
     }
 }

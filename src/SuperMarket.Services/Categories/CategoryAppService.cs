@@ -1,6 +1,7 @@
 ﻿using SuperMarket.Entities;
 using SuperMarket.Infrastructure.Application;
 using SuperMarket.Services.Categories.Contracts;
+using SuperMarket.Services.Categories.Exceptions;
 
 namespace SuperMarket.Services.Categories
 {
@@ -16,10 +17,19 @@ namespace SuperMarket.Services.Categories
 
         public void Add(AddCategoryDto dto)
         {
+
             var category = new Category
             {
                 Name = dto.Name,
             };
+
+            var isNameExist = _categoryRepository
+                .IsCategoryNameExist(dto.Name);
+            if (isNameExist)
+            {
+                throw new CategoryNameIsAlreadyExistException();
+            }
+
             _categoryRepository.Add(category);
             _unitOfWork.Commit();
         }

@@ -6,11 +6,8 @@ using SuperMarket.Persistance.EF;
 using SuperMarket.Persistance.EF.Categories;
 using SuperMarket.Services.Categories;
 using SuperMarket.Services.Categories.Contracts;
+using SuperMarket.Services.Categories.Exceptions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace SuperMarket.Services.Test.Unit.Categories
@@ -39,15 +36,29 @@ namespace SuperMarket.Services.Test.Unit.Categories
                 Name = "لبنیات"
             };
 
-            var category = new Category
-            {
-                Name = dto.Name,
-            };
-            _dataContext.Manipulate(_ => _.Categories.Add(category));
-
             _sut.Add(dto);
             
             _dataContext.Categories.Should().Contain(p => p.Name == dto.Name);
         }
+
+        [Fact]
+        public void Throw_Exception_if_CategoryNameIsAlreadyExistException_when_add_duplicate_name_in_category()
+        {
+            var category = new Category
+            {
+                Name = "لبنیات"
+            };
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            var dto = new AddCategoryDto
+            {
+                Name = category.Name,
+            };
+
+            Action expected = () => _sut.Add(dto);
+            expected.Should().ThrowExactly<CategoryNameIsAlreadyExistException>();
+        }
+
+
     }
 }
