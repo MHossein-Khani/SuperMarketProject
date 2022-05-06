@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace SuperMarket.Services.Categories.Contracts
 {
-    public interface CategoryService
+    public class UpdateCategoryDto
     {
-        void Add(AddCategoryDto dto);
-        void Update(UpdateCategoryDto dto, int id);
+        public string Name { get; set; }
     }
 }

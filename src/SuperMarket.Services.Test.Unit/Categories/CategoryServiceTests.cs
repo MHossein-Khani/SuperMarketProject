@@ -8,6 +8,7 @@ using SuperMarket.Services.Categories;
 using SuperMarket.Services.Categories.Contracts;
 using SuperMarket.Services.Categories.Exceptions;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace SuperMarket.Services.Test.Unit.Categories
@@ -59,6 +60,24 @@ namespace SuperMarket.Services.Test.Unit.Categories
             expected.Should().ThrowExactly<CategoryNameIsAlreadyExistException>();
         }
 
+        [Fact]
+        public void Update_updates_category_properly()
+        {
+            var category = new Category
+            {
+                Name = "لبنیات"
+            };
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
 
+            var dto = new UpdateCategoryDto
+            {
+                Name = "خشکبار"
+            };
+
+            _sut.Update(dto, category.Id);
+
+            var expected = _dataContext.Categories.FirstOrDefault(p => p.Id == category.Id);
+            expected.Name.Should().Be(dto.Name);
+        }
     }
 }
