@@ -38,6 +38,18 @@ namespace SuperMarket.Services.Categories
         {
             var category = _categoryRepository.FindById(id);
 
+            if(category == null)
+            {
+                throw new CategoryDoesNotExistException();
+            }
+
+            var isCategoryExist = _categoryRepository
+                .IsCategoryNameExist(dto.Name);
+            if (isCategoryExist)
+            {
+                throw new CategoryNameIsAlreadyExistException();
+            }
+
             category.Name = dto.Name;
 
             _unitOfWork.Commit();

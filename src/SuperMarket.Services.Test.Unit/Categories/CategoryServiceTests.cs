@@ -7,6 +7,7 @@ using SuperMarket.Persistance.EF.Categories;
 using SuperMarket.Services.Categories;
 using SuperMarket.Services.Categories.Contracts;
 using SuperMarket.Services.Categories.Exceptions;
+using SuperMarket.Test.Tools;
 using System;
 using System.Linq;
 using Xunit;
@@ -43,12 +44,9 @@ namespace SuperMarket.Services.Test.Unit.Categories
         }
 
         [Fact]
-        public void Throw_Exception_if_CategoryNameIsAlreadyExistException_when_add_duplicate_name_in_category()
+        public void Throw_exception_if_CategoryNameIsAlreadyExistException_when_add_duplicate_name_in_category()
         {
-            var category = new Category
-            {
-                Name = "لبنیات"
-            };
+            var category = CategoryFactory.CreateCategory("لبنیات");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
             var dto = new AddCategoryDto
@@ -63,10 +61,7 @@ namespace SuperMarket.Services.Test.Unit.Categories
         [Fact]
         public void Update_updates_category_properly()
         {
-            var category = new Category
-            {
-                Name = "لبنیات"
-            };
+            var category = CategoryFactory.CreateCategory("لبنیات");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
             var dto = new UpdateCategoryDto
@@ -78,6 +73,37 @@ namespace SuperMarket.Services.Test.Unit.Categories
 
             var expected = _dataContext.Categories.FirstOrDefault(p => p.Id == category.Id);
             expected.Name.Should().Be(dto.Name);
+        }
+
+        [Fact]
+        public void Throw_exception_if_CategoryNameIsAlreadyExistException_when_update_a_category_name()
+        {
+            var category1 = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category1));
+
+            var category2 = CategoryFactory.CreateCategory("خشکبار");
+            _dataContext.Manipulate(_ => _.Categories.Add(category2));
+
+            var dto = new UpdateCategoryDto
+            {
+                Name = "لبنیات"
+            };
+
+            Action expected = () => _sut.Update(dto, category2.Id);
+            expected.Should().ThrowExactly<CategoryNameIsAlreadyExistException>();
+        }
+
+        [Fact]
+        public void Throw_exception_if_CategoryDoesNotExistException_when_update_a_category_that_does_not_exist_in_database()
+        {
+            var dto = new UpdateCategoryDto
+            {
+                Name = "test"
+            };
+            var fakeId = 100;
+
+            Action expected = () => _sut.Update(dto, fakeId);
+            expected.Should().ThrowExactly<CategoryDoesNotExistException>();
         }
     }
 }

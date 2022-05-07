@@ -6,9 +6,8 @@ using SuperMarket.Persistance.EF;
 using SuperMarket.Persistance.EF.Categories;
 using SuperMarket.Services.Categories;
 using SuperMarket.Services.Categories.Contracts;
-using SuperMarket.Services.Categories.Exceptions;
 using SuperMarket.Specs.Infrastructure;
-using System;
+using SuperMarket.Test.Tools;
 using System.Linq;
 using Xunit;
 using static SuperMarket.Specs.BDDHelper;
@@ -41,10 +40,7 @@ namespace SuperMarket.Specs.Categories
         [Given("دسته بندی با عنوان 'لبنیات' در فهرست دسته بندی وجود دارد")]
         public void Given()
         {
-            _category = new Category
-            {
-                Name = "لبنیات"
-            };
+            _category = CategoryFactory.CreateCategory("لبنیات");
             _dataContext.Manipulate(_ => _.Categories.Add(_category));
         }
 

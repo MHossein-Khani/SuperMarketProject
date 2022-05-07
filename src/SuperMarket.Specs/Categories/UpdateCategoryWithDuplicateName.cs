@@ -18,20 +18,22 @@ namespace SuperMarket.Specs.Categories
 {
     [Scenario("تعریف دسته بندی")]
     [Feature("",
-           AsA = "فروشنده ",
-           IWantTo = "دسته بندی را تعریف کنم",
-           InOrderTo = "کالا را تعریف کنم"
-           )]
-    public class AddCategoryByTheNameThatExists : EFDataContextDatabaseFixture
+          AsA = "فروشنده ",
+          IWantTo = "دسته بندی را ویرایش کنم",
+          InOrderTo = "تا بتوانم در دسته بندی ها تغییر ایجاد کنم"
+          )]
+    public class UpdateCategoryWithDuplicateName : EFDataContextDatabaseFixture
     {
         private readonly EFDataContext _dataContext;
         private readonly CategoryService _sut;
         private readonly UnitOfWork _unitOfWork;
         private readonly CategoryRepository _categoryRepository;
-        private AddCategoryDto _addDto;
+        private Category _category1;
+        private Category _category2;
+        private UpdateCategoryDto _dto;
         Action expected;
 
-        public AddCategoryByTheNameThatExists(ConfigurationFixture configuration) : base(configuration)
+        public UpdateCategoryWithDuplicateName(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
@@ -39,32 +41,38 @@ namespace SuperMarket.Specs.Categories
             _sut = new CategoryAppService(_categoryRepository, _unitOfWork);
         }
 
-        [Given("دسته بندی با عنوان 'لبنیات' در فهرست دسته بندی وجود دارد")]
+        [Given("دسته بندی با عنوان 'لبنیات' و 'خشکبار' در فهرست دسته بندی وجود دارد")]
         public void Given()
         {
-            var category = CategoryFactory.CreateCategory("لبنیات");
-            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            _category1 = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(_category1));
+
+            _category2 = CategoryFactory.CreateCategory("خشکبار");
+            _dataContext.Manipulate(_ => _.Categories.Add(_category2));
+
+
         }
 
-        [When("دسته بندی با عنوان 'لبنیات' را تعریف میکنیم")]
+        [When("دسته بندی 'خشکبار' را به 'لبنیات' تغییر میدهیم")]
         public void When()
         {
-             _addDto = new AddCategoryDto
+            _dto = new UpdateCategoryDto
             {
                 Name = "لبنیات"
             };
 
-            expected =() =>  _sut.Add(_addDto);
+            expected = () => _sut.Update(_dto, _category2.Id);
         }
 
         [Then("تنها یک دسته بندی با عنوان ' لبنیات' باید در فهرست دسته بندی کالا وجود داشته باشد")]
         public void Then()
         {
-            _dataContext.Categories.Where(p => p.Name == _addDto.Name)
+            _dataContext.Categories.Where(p => p.Name == _dto.Name)
                 .Should().HaveCount(1);
         }
 
-        [And("خطایی با عنوان 'عنوان دسته بندی کالا تکراریست ' باید رخ دهد")]
+        [And("خطایی با عنوان 'عنوان دسته بندی کالا وجود دارد' باید رخ دهد")]
         public void And()
         {
             expected.Should().ThrowExactly<CategoryNameIsAlreadyExistException>();

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SuperMarket.Specs.Categories
+namespace SuperMarket.Services.Categories.Exceptions
 {
-    internal class UpdateBookWithDuplicateName
+    public class CategoryDoesNotExistException : Exception
     {
     }
 }
