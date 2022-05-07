@@ -27,6 +27,16 @@ namespace SuperMarket.Persistance.EF.Categories
             return _dataContext.Categories.Find(id);
         }
 
+        public List<GetCategoryDto> GetAll()
+        {
+            return _dataContext.Categories.
+                Select(p => new GetCategoryDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                }).ToList();
+        }
+
         public bool IsCategoryNameExist(string name)
         {
            return _dataContext.Categories.Any(p => p.Name == name);

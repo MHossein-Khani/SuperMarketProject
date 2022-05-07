@@ -2,6 +2,7 @@
 using SuperMarket.Infrastructure.Application;
 using SuperMarket.Services.Categories.Contracts;
 using SuperMarket.Services.Categories.Exceptions;
+using System.Collections.Generic;
 
 namespace SuperMarket.Services.Categories
 {
@@ -34,6 +35,11 @@ namespace SuperMarket.Services.Categories
             _unitOfWork.Commit();
         }
 
+        public List<GetCategoryDto> GetAll()
+        {
+            return _categoryRepository.GetAll();
+        }
+
         public void Update(UpdateCategoryDto dto, int id)
         {
             var category = _categoryRepository.FindById(id);
@@ -54,5 +60,7 @@ namespace SuperMarket.Services.Categories
 
             _unitOfWork.Commit();
         }
+
+       
     }
 }

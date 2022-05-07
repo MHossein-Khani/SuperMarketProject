@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace SuperMarket.Services.Categories.Contracts
 {
-    public interface CategoryService
+    public class GetCategoryDto
     {
-        void Add(AddCategoryDto dto);
-        void Update(UpdateCategoryDto dto, int id);
-        List<GetCategoryDto> GetAll();
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

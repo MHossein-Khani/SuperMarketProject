@@ -18,7 +18,7 @@ namespace SuperMarket.Specs.Categories
     [Feature("",
            AsA = "فروشنده ",
            IWantTo = "دسته بندی را ویرایش کنم",
-           InOrderTo = "تا بتوانم در دسته بندی ها تغییر ایجاد کنم"
+           InOrderTo = " در دسته بندی ها تغییر ایجاد کنم"
            )]
     public class UpdateCategory : EFDataContextDatabaseFixture
     {

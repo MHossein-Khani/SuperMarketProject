@@ -9,6 +9,7 @@ using SuperMarket.Services.Categories.Contracts;
 using SuperMarket.Services.Categories.Exceptions;
 using SuperMarket.Test.Tools;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -104,6 +105,29 @@ namespace SuperMarket.Services.Test.Unit.Categories
 
             Action expected = () => _sut.Update(dto, fakeId);
             expected.Should().ThrowExactly<CategoryDoesNotExistException>();
+        }
+
+        [Fact]
+        public void GetAll_returns_all_category_properly()
+        {
+            CreateCategoriesInDataBase();
+
+            var expected = _sut.GetAll();
+
+            expected.Should().HaveCount(2);
+            expected.Should().Contain(p => p.Name == "لبنیات");
+            expected.Should().Contain(p => p.Name == "خشکبار");
+        }
+
+        private void CreateCategoriesInDataBase()
+        {
+            var categories = new List<Category>
+            {
+                new Category { Name = "لبنیات"},
+                new Category { Name = "خشکبار"},
+            };
+            _dataContext.Manipulate(_ =>
+            _.Categories.AddRange(categories));
         }
     }
 }
