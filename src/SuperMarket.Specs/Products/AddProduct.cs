@@ -27,6 +27,7 @@ namespace SuperMarket.Specs.Products
         private readonly ProductRepository _productRipository;
         private readonly ProductService _sut;
         private Category _category;
+        private AddProductDto _dto;
        
         public AddProduct(ConfigurationFixture configuration) : base(configuration)
         {
@@ -51,7 +52,7 @@ namespace SuperMarket.Specs.Products
         [When("کالایی با کد '1' با عنوان 'شیر کاله' با حداقل موجودی '5' با قیمت فروش '5000' با موجودی '10' در دسته بندی 'لبنیات' تعریف میکنیم")]
         public void When()
         {
-            var product = new Product
+            _dto = new AddProductDto
             {
                 Code = "1",
                 Name = "شیر کاله",
@@ -60,12 +61,28 @@ namespace SuperMarket.Specs.Products
                 Inventory = 10,
                 CategoryId = _category.Id
             };
+            _sut.Add(_dto);
         }
 
         [Then("کالایی با کد '1' با عنوان 'شیر کاله' با حداقل موجودی '5' با قیمت فروش '5000' با موجودی '10' در دسته بندی 'لبنیات' باید وجود داشته باشد")]
         public void Then()
         {
+            var expected = _dataContext.products.FirstOrDefault();
+            expected.Code.Should().Be(_dto.Code);
+            expected.Name.Should().Be(_dto.Name);
+            expected.MinimumInventory.Should().Be(_dto.MinimumInventory);
+            expected.Price.Should().Be(_dto.Price);
+            expected.Inventory.Should().Be(_dto.Inventory);
+            expected.CategoryId.Should().Be(_dto.CategoryId);
+        }
 
+        [Fact]
+        public void Run()
+        {
+            Given();
+            And();
+            When();
+            Then();
         }
     }
 }
