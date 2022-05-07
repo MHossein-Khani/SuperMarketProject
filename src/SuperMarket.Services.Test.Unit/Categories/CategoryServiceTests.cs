@@ -119,6 +119,17 @@ namespace SuperMarket.Services.Test.Unit.Categories
             expected.Should().Contain(p => p.Name == "خشکبار");
         }
 
+        [Fact]
+        public void Delete_deletes_a_category_properly()
+        {
+            var category = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            _sut.Delete(category.Id);
+
+            _dataContext.Categories.Should().HaveCount(0);
+        }
+
         private void CreateCategoriesInDataBase()
         {
             var categories = new List<Category>

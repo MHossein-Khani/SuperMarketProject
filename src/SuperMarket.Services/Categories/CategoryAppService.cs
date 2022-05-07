@@ -35,6 +35,12 @@ namespace SuperMarket.Services.Categories
             _unitOfWork.Commit();
         }
 
+        public void Delete(int id)
+        {
+            _categoryRepository.Delete(id);
+            _unitOfWork.Commit();
+        }
+
         public List<GetCategoryDto> GetAll()
         {
             return _categoryRepository.GetAll();

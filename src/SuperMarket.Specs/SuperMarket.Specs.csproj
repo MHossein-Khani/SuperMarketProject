@@ -29,6 +29,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\SuperMarket.Infrastructure\SuperMarket.Infrastructure.csproj" />
 	  <ProjectReference Include="..\SuperMarket.Persistance.EF\SuperMarket.Persistance.EF.csproj" />
+	  <ProjectReference Include="..\SuperMarket.Test.Tools\SuperMarket.Test.Tools.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

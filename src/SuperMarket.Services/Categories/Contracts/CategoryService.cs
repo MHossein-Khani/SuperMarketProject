@@ -11,5 +11,6 @@ namespace SuperMarket.Services.Categories.Contracts
         void Add(AddCategoryDto dto);
         void Update(UpdateCategoryDto dto, int id);
         List<GetCategoryDto> GetAll();
+        void Delete(int id);
     }
 }
