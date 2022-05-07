@@ -130,6 +130,20 @@ namespace SuperMarket.Services.Test.Unit.Categories
             _dataContext.Categories.Should().HaveCount(0);
         }
 
+        [Fact]
+        public void Throw_exception_if_InThisCategoryProductIsDefinedException_when_deleting_a_category_that_has_product()
+        {
+            var category = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            var product = ProductFactory.CreatProduct(category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product));
+
+            Action expected = () => _sut.Delete(category.Id);
+
+            expected.Should().ThrowExactly<InThisCategoryProductIsDefinedException>();
+        }
+
         private void CreateCategoriesInDataBase()
         {
             var categories = new List<Category>

@@ -37,6 +37,15 @@ namespace SuperMarket.Services.Categories
 
         public void Delete(int id)
         {
+            var category = _categoryRepository.FindById(id);
+
+            var isProductExist = _categoryRepository.
+                IsCategoryHasProduct(id);
+            if (isProductExist)
+            {
+                throw new InThisCategoryProductIsDefinedException();
+            }
+
             _categoryRepository.Delete(id);
             _unitOfWork.Commit();
         }
