@@ -1,4 +1,5 @@
-﻿using SuperMarket.Services.Products.Cantracts;
+﻿using SuperMarket.Entities;
+using SuperMarket.Services.Products.Cantracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,11 @@ namespace SuperMarket.Persistance.EF.Products
         public EFProductRepository(EFDataContext dataContext)
         {
             _dataContext = dataContext;
+        }
+
+        public void Add(Product product)
+        {
+            _dataContext.products.Add(product);
         }
     }
 }

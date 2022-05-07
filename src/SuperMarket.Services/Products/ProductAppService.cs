@@ -1,4 +1,5 @@
-﻿using SuperMarket.Infrastructure.Application;
+﻿using SuperMarket.Entities;
+using SuperMarket.Infrastructure.Application;
 using SuperMarket.Services.Products.Cantracts;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,20 @@ namespace SuperMarket.Services.Products
             _unitOfWork = unitOfWork;
         }
 
+        public void Add(AddProductDto dto)
+        {
+            var product = new Product
+            {
+                Code = dto.Code,
+                Name = dto.Name,
+                MinimumInventory = dto.MinimumInventory,
+                Price = dto.Price,
+                Inventory = dto.Inventory,
+                CategoryId = dto.CategoryId,
+            };
 
+            _productRepository.Add(product);
+            _unitOfWork.Commit();
+        }
     }
 }

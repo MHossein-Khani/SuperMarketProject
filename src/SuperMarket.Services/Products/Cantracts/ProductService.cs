@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace SuperMarket.Services.Products.Cantracts
 {
-    internal class ProductService
+    public interface ProductService
     {
+        void Add(AddProductDto dto);
     }
 }
