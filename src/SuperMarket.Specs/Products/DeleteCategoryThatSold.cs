@@ -70,5 +70,11 @@ namespace SuperMarket.Specs.Products
         {
             _dataContext.products.Should().HaveCount(1);
         }
+
+        [And("خطایی با عنوان 'کالا در سند فاکتور فروش استفاده شده است' باید رخ دهد")]
+        public void ThenAnd()
+        {
+            expected.Should().ThrowExactly<ProductUsedInSalesInvoiceException>();
+        }
     }
 }

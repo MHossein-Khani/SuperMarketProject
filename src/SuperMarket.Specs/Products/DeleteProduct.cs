@@ -22,8 +22,6 @@ namespace SuperMarket.Specs.Products
         private readonly ProductService _sut;
         private Category _category;
         private Product _product;
-        private SalesInvoice _salesInvoice;
-        Action expected;
                
         public DeleteProduct(ConfigurationFixture configuration) : base(configuration)
         {

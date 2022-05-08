@@ -150,6 +150,24 @@ namespace SuperMarket.Services.Test.Unit.Products
             _dataContext.products.Should().HaveCount(0);
         }
 
+        [Fact]
+        public void Throw_Exception_if_ProductUsedInSalesInvoiceException_when_deleting_a_product_that_sold_before()
+        {
+            var category = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            var product = ProductFactory.CreatProduct("1", category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product));
+
+            var salesInvoice = SalesInvoiceFactory.
+                CreateSalesInvoice(product.Code, product.Name, product.Id);
+            _dataContext.Manipulate(_ => _.SalesInvoices.Add(salesInvoice));
+
+            Action expected = () => _sut.Delete(product.Id);
+            expected.Should().ThrowExactly<ProductUsedInSalesInvoiceException>();
+
+        }
+
         private static AddProductDto GenerateAddProductDto(int categoryId)
         {
             return new AddProductDto

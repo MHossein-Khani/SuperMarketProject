@@ -68,7 +68,13 @@ namespace SuperMarket.Persistance.EF.Products
 
         public void Delete(Product product)
         {
-            _dataContext.products.Remove(product)
+            _dataContext.products.Remove(product);
+        }
+
+        public bool IsProductUsedInSalesInvoice(int productId)
+        {
+            return _dataContext.SalesInvoices.
+                Any(p => p.ProductId == productId);
         }
     }
 }

@@ -43,6 +43,14 @@ namespace SuperMarket.Services.Products
         public void Delete(int id)
         {
             var product = _productRepository.FindById(id);
+
+            var IsProductUsed = _productRepository.
+                IsProductUsedInSalesInvoice(id);
+            if (IsProductUsed)
+            {
+                throw new ProductUsedInSalesInvoiceException();
+            }
+
             _productRepository.Delete(product);
             _unitOfWork.Commit();
         }
