@@ -40,6 +40,12 @@ namespace SuperMarket.Services.Products
             _unitOfWork.Commit();
         }
 
+        public void Delete(int id)
+        {
+            var product = _productRepository.FindById(id);
+            _productRepository.Delete(product);
+        }
+
         public List<GetProductDto> Get(int categoryId)
         {
             return _productRepository.Get(categoryId);

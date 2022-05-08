@@ -12,5 +12,6 @@ namespace SuperMarket.Services.Products.Cantracts
         void Update(UpdateProductDto dto, int id);
         List<GetProductDto> Get(int categoryId);
         List<GetProductDto> GetAll();
+        void Delete(int id);
     }
 }

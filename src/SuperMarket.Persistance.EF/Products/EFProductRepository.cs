@@ -65,5 +65,10 @@ namespace SuperMarket.Persistance.EF.Products
                     CategoryId = p.CategoryId
                 }).ToList();
         }
+
+        public void Delete(Product product)
+        {
+            _dataContext.products.Remove(product)
+        }
     }
 }
