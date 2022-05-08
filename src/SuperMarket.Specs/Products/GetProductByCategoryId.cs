@@ -14,6 +14,12 @@ using static SuperMarket.Specs.BDDHelper;
 
 namespace SuperMarket.Specs.Products
 {
+    [Scenario("نمایش کالا")]
+    [Feature("",
+           AsA = "فروشنده ",
+           IWantTo = "کالا را نمایش دهم",
+           InOrderTo = "کالاها را مشاهده کنم"
+           )]
     public class GetProductByCategoryId : EFDataContextDatabaseFixture
     {
         private readonly EFDataContext _dataContext;
