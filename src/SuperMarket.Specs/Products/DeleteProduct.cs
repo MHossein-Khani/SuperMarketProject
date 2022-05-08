@@ -60,5 +60,23 @@ namespace SuperMarket.Specs.Products
         {
             _sut.Delete(_product.Id);
         }
+
+        [Then("کالا با کد '1' با عنوان 'شیر کاله' " +
+            "با حداقل موجودی '5' با قیمت فروش '5000' " +
+            "با موجودی '10' در دسته بندی 'لبنیات' نباید وجود داشته باشد")]
+        public void Then()
+        {
+            _dataContext.products.Should().HaveCount(0); 
+        }
+
+        [Fact]
+        public void Run()
+        {
+            Given();
+            GivenAnd();
+            And();
+            When();
+            Then();
+        }
     }
 }
