@@ -136,6 +136,19 @@ namespace SuperMarket.Services.Test.Unit.Products
             expected.Should().HaveCount(2);
         }
 
+        [Fact]
+        public void Delete_deletes_product_properly()
+        {
+            var category = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            var product = ProductFactory.CreatProduct("1", category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product));
+
+            _sut.Delete(product.Id);
+
+            _dataContext.products.Should().HaveCount(0);
+        }
 
         private static AddProductDto GenerateAddProductDto(int categoryId)
         {

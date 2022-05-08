@@ -44,6 +44,7 @@ namespace SuperMarket.Services.Products
         {
             var product = _productRepository.FindById(id);
             _productRepository.Delete(product);
+            _unitOfWork.Commit();
         }
 
         public List<GetProductDto> Get(int categoryId)

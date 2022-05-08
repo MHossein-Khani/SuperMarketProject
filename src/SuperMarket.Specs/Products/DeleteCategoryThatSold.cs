@@ -6,15 +6,18 @@ using SuperMarket.Persistance.EF;
 using SuperMarket.Persistance.EF.Products;
 using SuperMarket.Services.Products;
 using SuperMarket.Services.Products.Cantracts;
+using SuperMarket.Services.Products.Exceptions;
 using SuperMarket.Specs.Infrastructure;
 using SuperMarket.Test.Tools;
 using System;
+using System.Linq;
 using Xunit;
 using static SuperMarket.Specs.BDDHelper;
 
 namespace SuperMarket.Specs.Products
 {
-    public class DeleteProduct : EFDataContextDatabaseFixture
+
+    public class DeleteCategoryThatSold : EFDataContextDatabaseFixture
     {
         private readonly EFDataContext _dataContext;
         private readonly UnitOfWork _unitOfWork;
@@ -24,8 +27,8 @@ namespace SuperMarket.Specs.Products
         private Product _product;
         private SalesInvoice _salesInvoice;
         Action expected;
-               
-        public DeleteProduct(ConfigurationFixture configuration) : base(configuration)
+
+        public DeleteCategoryThatSold(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
@@ -47,36 +50,25 @@ namespace SuperMarket.Specs.Products
             _dataContext.Manipulate(_ => _.products.Add(_product));
         }
 
-        [And("کالای با کد '1' در فاکتور فروش استفاده نشده باشد")]
+        [And("کالای با کد '1' در فاکتور فروش استفاده شده باشد")]
         public void And()
         {
-
+            _salesInvoice = SalesInvoiceFactory.
+                CreateSalesInvoice(_product.Code, _product.Name, _product.Id);
+            _dataContext.Manipulate(_ => _.SalesInvoices.Add(_salesInvoice));
         }
 
-        [When("کالا با کد '1' با عنوان 'شیر کاله' " +
-            "با حداقل موجودی '5' با قیمت فروش '5000' " +
-            "با موجودی '10' در دسته بندی 'لبنیات' را حذف میکنیم")]
+        [When("کالا با کد '1 " +
+            " دسته بندی 'لبنیات' را حذف میکنیم")]
         public void When()
         {
-            _sut.Delete(_product.Id);
+            expected = () =>_sut.Delete(_product.Id);
         }
 
-        [Then("کالا با کد '1' با عنوان 'شیر کاله' " +
-            "با حداقل موجودی '5' با قیمت فروش '5000' " +
-            "با موجودی '10' در دسته بندی 'لبنیات' نباید وجود داشته باشد")]
+        [Then("کالا با کد '1' باید وجود داشته باشد")]
         public void Then()
         {
-            _dataContext.products.Should().HaveCount(0); 
-        }
-
-        [Fact]
-        public void Run()
-        {
-            Given();
-            GivenAnd();
-            And();
-            When();
-            Then();
+            _dataContext.products.Should().HaveCount(1);
         }
     }
 }
