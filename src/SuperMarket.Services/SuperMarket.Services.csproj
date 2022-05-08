@@ -9,8 +9,4 @@
     <ProjectReference Include="..\SuperMarket.Infrastructure\SuperMarket.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Products\Exceptions\" />
-  </ItemGroup>
-
 </Project>

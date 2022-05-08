@@ -6,8 +6,10 @@ using SuperMarket.Persistance.EF;
 using SuperMarket.Persistance.EF.Products;
 using SuperMarket.Services.Products;
 using SuperMarket.Services.Products.Cantracts;
+using SuperMarket.Services.Products.Exceptions;
 using SuperMarket.Specs.Infrastructure;
 using SuperMarket.Test.Tools;
+using System;
 using System.Linq;
 using Xunit;
 using static SuperMarket.Specs.BDDHelper;
@@ -20,7 +22,7 @@ namespace SuperMarket.Specs.Products
            IWantTo = "کالا را تعریف کنم",
            InOrderTo = " در فاکتور ها از آن استفاده کنم"
            )]
-    public class AddProduct : EFDataContextDatabaseFixture
+    public class AddProductWithDuplicateCodeInACategory : EFDataContextDatabaseFixture
     {
         private readonly EFDataContext _dataContext;
         private readonly UnitOfWork _unitOfWork;
@@ -28,8 +30,9 @@ namespace SuperMarket.Specs.Products
         private readonly ProductService _sut;
         private Category _category;
         private AddProductDto _dto;
-       
-        public AddProduct(ConfigurationFixture configuration) : base(configuration)
+        Action expected;
+
+        public AddProductWithDuplicateCodeInACategory(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
@@ -44,14 +47,16 @@ namespace SuperMarket.Specs.Products
             _dataContext.Manipulate(_ => _.Categories.Add(_category));
         }
 
-        [And("هیچ کالایی در دسته بندی با عنوان 'لبنیات' وجود ندارد")]
+        [And(" کالایی با کد '1' با عنوان 'شیر کاله' " +
+            "با حداقل موجودی '5' با قیمت فروش '5000' " +
+            "با موجودی '10' در دسته بندی 'لبنیات' وجود دارد")]
         public void And()
         {
+            var product = ProductFactory.CreatProduct(_category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product));
         }
 
-        [When("کالایی با کد '1' با عنوان 'شیر کاله' " +
-            "با حداقل موجودی '5' با قیمت فروش '5000' " +
-            "با موجودی '10' در دسته بندی 'لبنیات' تعریف میکنیم")]
+        [When("کالایی با کد '1'  تعریف میکنیم")]
         public void When()
         {
             _dto = new AddProductDto
@@ -63,21 +68,19 @@ namespace SuperMarket.Specs.Products
                 Inventory = 10,
                 CategoryId = _category.Id
             };
-            _sut.Add(_dto);
+            expected = () => _sut.Add(_dto);
         }
 
-        [Then("کالایی با کد '1' با عنوان 'شیر کاله'" +
-            " با حداقل موجودی '5' با قیمت فروش '5000' " +
-            "با موجودی '10' در دسته بندی 'لبنیات' باید وجود داشته باشد")]
+        [Then(" تنها یک کالا با کد '1' باید وجود داشته باشد")]
         public void Then()
         {
-            var expected = _dataContext.products.FirstOrDefault();
-            expected.Code.Should().Be(_dto.Code);
-            expected.Name.Should().Be(_dto.Name);
-            expected.MinimumInventory.Should().Be(_dto.MinimumInventory);
-            expected.Price.Should().Be(_dto.Price);
-            expected.Inventory.Should().Be(_dto.Inventory);
-            expected.CategoryId.Should().Be(_dto.CategoryId);
+            _dataContext.products.Should().HaveCount(1);
+        }
+
+        [And("خطایی با عنوان ' این کالا در این دسته بندی تعریف شده است' باید رخ دهد")]
+        public void ThenAnd()
+        {
+            expected.Should().ThrowExactly<ProductISAlreadyExistException>();
         }
 
         [Fact]
@@ -87,6 +90,7 @@ namespace SuperMarket.Specs.Products
             And();
             When();
             Then();
+            ThenAnd();
         }
     }
 }

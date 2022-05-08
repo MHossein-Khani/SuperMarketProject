@@ -1,11 +1,7 @@
 ﻿using SuperMarket.Entities;
 using SuperMarket.Infrastructure.Application;
 using SuperMarket.Services.Products.Cantracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SuperMarket.Services.Products.Exceptions;
 
 namespace SuperMarket.Services.Products
 {
@@ -32,7 +28,28 @@ namespace SuperMarket.Services.Products
                 CategoryId = dto.CategoryId,
             };
 
+            var isProductExist = _productRepository.
+                IsProductCodeExist(dto.Code);
+            if (isProductExist)
+            {
+                throw new ProductISAlreadyExistException();
+            }
+
             _productRepository.Add(product);
+            _unitOfWork.Commit();
+        }
+
+        public void Update(UpdateProductDto dto, int id)
+        {
+            var product = _productRepository.FindById(id);
+
+            product.Code = dto.Code;
+            product.Name = dto.Name;
+            product.MinimumInventory = dto.MinimumInventory;
+            product.Price = dto.Price;
+            product.Inventory = dto.Inventory;
+            product.CategoryId = dto.CategoryId;
+
             _unitOfWork.Commit();
         }
     }

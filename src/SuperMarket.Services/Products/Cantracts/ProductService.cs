@@ -9,5 +9,6 @@ namespace SuperMarket.Services.Products.Cantracts
     public interface ProductService
     {
         void Add(AddProductDto dto);
+        void Update(UpdateProductDto dto, int id);
     }
 }

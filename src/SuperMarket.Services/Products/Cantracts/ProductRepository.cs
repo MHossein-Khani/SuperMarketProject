@@ -10,5 +10,7 @@ namespace SuperMarket.Services.Products.Cantracts
     public interface ProductRepository
     {
         void Add(Product product);
+        bool IsProductCodeExist(string code);
+        Product FindById(int id);
     }
 }

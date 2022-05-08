@@ -16,20 +16,21 @@ namespace SuperMarket.Specs.Products
 {
     [Scenario("تعریف کالا")]
     [Feature("",
-           AsA = "فروشنده ",
-           IWantTo = "کالا را تعریف کنم",
-           InOrderTo = " در فاکتور ها از آن استفاده کنم"
-           )]
-    public class AddProduct : EFDataContextDatabaseFixture
+          AsA = "فروشنده ",
+          IWantTo = "کالا را ویرایش کنم",
+          InOrderTo = " در آن تغییرات اعمال کنم"
+          )]
+    public class UpdateProduct : EFDataContextDatabaseFixture
     {
         private readonly EFDataContext _dataContext;
         private readonly UnitOfWork _unitOfWork;
         private readonly ProductRepository _productRipository;
         private readonly ProductService _sut;
         private Category _category;
-        private AddProductDto _dto;
-       
-        public AddProduct(ConfigurationFixture configuration) : base(configuration)
+        private Product _product;
+        private UpdateProductDto _dto;
+
+        public UpdateProduct(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
@@ -44,31 +45,37 @@ namespace SuperMarket.Specs.Products
             _dataContext.Manipulate(_ => _.Categories.Add(_category));
         }
 
-        [And("هیچ کالایی در دسته بندی با عنوان 'لبنیات' وجود ندارد")]
+        [And(" کالایی با کد '1' با عنوان 'شیر کاله' " +
+            "با حداقل موجودی '5' با قیمت فروش '5000' " +
+            "با موجودی '10' در دسته بندی 'لبنیات' وجود دارد")]
         public void And()
         {
+            _product = ProductFactory.CreatProduct(_category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(_product));
         }
 
-        [When("کالایی با کد '1' با عنوان 'شیر کاله' " +
-            "با حداقل موجودی '5' با قیمت فروش '5000' " +
-            "با موجودی '10' در دسته بندی 'لبنیات' تعریف میکنیم")]
+        [When("کالای با کد '1' با عنوان 'شیر کاله' با حداقل موجودی '5' " +
+            "با قیمت فروش'5000' با موجودی '10' را به  کالای با کد '2' " +
+            "با عنوان 'ماست سون' با حداقل موجودی '2' با قیمت فروش '7000' " +
+            "با موجودی '5' را در دسته بندی 'لبنیات' تغییر میدهیم")]
         public void When()
         {
-            _dto = new AddProductDto
+            _dto = new UpdateProductDto
             {
-                Code = "1",
-                Name = "شیر کاله",
-                MinimumInventory = 5,
-                Price = 5000,
-                Inventory = 10,
+                Code = "2",
+                Name = "ماست سون",
+                MinimumInventory = 2,
+                Price = 7000,
+                Inventory = 5,
                 CategoryId = _category.Id
             };
-            _sut.Add(_dto);
+            _sut.Update(_dto, _product.Id);
         }
 
-        [Then("کالایی با کد '1' با عنوان 'شیر کاله'" +
-            " با حداقل موجودی '5' با قیمت فروش '5000' " +
-            "با موجودی '10' در دسته بندی 'لبنیات' باید وجود داشته باشد")]
+        [Then(" کالای با کد '1' با عنوان 'شیر کاله' با حداقل موجودی '5' " +
+            "با قیمت فروش '5000' با موجودی '10' باید  به  کالای با کد '2' " +
+            "با عنوان 'ماست سون' با حداقل موجودی '2' با قیمت فروش '7000'" +
+            " با موجودی '5'  در دسته بندی 'لبنیات'  تغییر پیدا کرده باش")]
         public void Then()
         {
             var expected = _dataContext.products.FirstOrDefault();
@@ -88,5 +95,6 @@ namespace SuperMarket.Specs.Products
             When();
             Then();
         }
+
     }
 }
