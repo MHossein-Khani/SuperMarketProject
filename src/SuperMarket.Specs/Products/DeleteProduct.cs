@@ -23,7 +23,7 @@ namespace SuperMarket.Specs.Products
         private readonly ProductRepository _productRipository;
         private readonly ProductService _sut;
         private Category _category;
-        private Product _product1;
+        private Product _product;
                
         public DeleteProduct(ConfigurationFixture configuration) : base(configuration)
         {
@@ -33,24 +33,32 @@ namespace SuperMarket.Specs.Products
             _sut = new ProductAppService(_productRipository, _unitOfWork);
         }
 
-        [When("دسته بندی با عنوان 'لبنیات' در فهرست دسته بندی وجود دارد")]
-        public void When()
+        [Given("دسته بندی با عنوان 'لبنیات' در فهرست دسته بندی وجود دارد")]
+        public void Given()
         {
             _category = CategoryFactory.CreateCategory("لبنیات");
             _dataContext.Manipulate(_ => _.Categories.Add(_category));
         }
 
         [And("کالای با کد '1' در دسته بندی 'لبنیات' وجود دارد")]
-        public void And()
+        public void GivenAnd()
         {
-            _product1 = ProductFactory.CreatProduct("1", _category.Id);
-            _dataContext.Manipulate(_ => _.products.Add(_product1));
+            _product = ProductFactory.CreatProduct("1", _category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(_product));
         }
 
-        //[And("کالای با کد '1' در فاکتور فروش استفاده نشده باشد")]
-        //public void And()
-        //{
+        [And("کالای با کد '1' در فاکتور فروش استفاده نشده باشد")]
+        public void And()
+        {
 
-        //}
+        }
+
+        [When("کالا با کد '1' با عنوان 'شیر کاله' " +
+            "با حداقل موجودی '5' با قیمت فروش '5000' " +
+            "با موجودی '10' در دسته بندی 'لبنیات' را حذف میکنیم")]
+        public void When()
+        {
+            _sut.Delete(_product.Id);
+        }
     }
 }
