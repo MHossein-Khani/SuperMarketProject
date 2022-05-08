@@ -108,13 +108,30 @@ namespace SuperMarket.Services.Test.Unit.Products
             var category = CategoryFactory.CreateCategory("لبنیات");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            Create_list_of_products(category.Id);
+            Create_list_of_products_by_category_id(category.Id);
 
             var dto = new GetProductDto
             {
                 CategoryId = category.Id
             };
             var expected = _sut.Get(dto.CategoryId);
+
+            expected.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public void GetAll_returns_all_products_properly()
+        {
+            var category = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            var category2 = CategoryFactory.CreateCategory("خشکبار");
+            _dataContext.Manipulate(_ => _.Categories.Add(category2));
+
+            Create_list_of_products(category.Id, category2.Id);
+
+            
+            var expected = _sut.GetAll();
 
             expected.Should().HaveCount(2);
         }
@@ -146,7 +163,7 @@ namespace SuperMarket.Services.Test.Unit.Products
             };
         }
 
-        private void Create_list_of_products(int categoryId)
+        private void Create_list_of_products_by_category_id(int categoryId)
         {
             var products = new List<Product>
             {
@@ -173,5 +190,34 @@ namespace SuperMarket.Services.Test.Unit.Products
 
             _dataContext.Manipulate(_ => _.products.AddRange(products));
         }
+
+        private void Create_list_of_products(int categoryId1, int categoryId2)
+        {
+            var products = new List<Product>
+            {
+                new Product
+                {
+                    Code = "1",
+                    Name = "شیر کاله",
+                    MinimumInventory = 5,
+                    Price = 5000,
+                    Inventory = 10,
+                    CategoryId = categoryId1
+                },
+
+                new Product
+                {
+                    Code = "2",
+                    Name = "test",
+                    MinimumInventory = 8,
+                    Price = 10000,
+                    Inventory = 9,
+                    CategoryId = categoryId2
+                },
+            };
+
+            _dataContext.Manipulate(_ => _.products.AddRange(products));
+        }
+
     }
 }

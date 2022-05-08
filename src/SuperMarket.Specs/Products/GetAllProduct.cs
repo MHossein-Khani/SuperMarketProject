@@ -60,6 +60,21 @@ namespace SuperMarket.Specs.Products
             _expected = _sut.GetAll();
         }
 
+        [Then("کالای با کد '1' و '2' در دسته بندی 'لبنیات' 'خشکبار' باید نمایش داده شوند")]
+        public void Then()
+        {
+            _expected.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public void Run()
+        {
+            Given();
+            And();
+            When();
+            Then();
+        }
+
         private void Create_list_of_products()
         {
             var products = new List<Product>
