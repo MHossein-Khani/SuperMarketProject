@@ -51,5 +51,19 @@ namespace SuperMarket.Persistance.EF.Products
                     CategoryId = p.CategoryId
                 }).ToList();
         }
+
+        public List<GetProductDto> GetAll()
+        {
+            return _dataContext.products
+                .Select(p => new GetProductDto
+                {
+                    Code = p.Code,
+                    Name = p.Name,
+                    Inventory = p.Inventory,
+                    Price = p.Price,
+                    MinimumInventory = p.MinimumInventory,
+                    CategoryId = p.CategoryId
+                }).ToList();
+        }
     }
 }

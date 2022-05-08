@@ -45,6 +45,11 @@ namespace SuperMarket.Services.Products
             return _productRepository.Get(categoryId);
         }
 
+        public List<GetProductDto> GetAll()
+        {
+            return _productRepository.GetAll();
+        }
+
         public void Update(UpdateProductDto dto, int id)
         {
             var product = _productRepository.FindById(id);

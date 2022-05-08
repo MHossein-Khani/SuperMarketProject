@@ -14,5 +14,6 @@ namespace SuperMarket.Services.Products.Cantracts
         Product FindById(int id);
         int countOfProductCode(string code);
         List<GetProductDto> Get(int categoryId);
+        List<GetProductDto> GetAll();
     }
 }
