@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SuperMarket.Services.SalesInvoices.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace SuperMarket.Services.SalesInvoices
 {
-    internal class SalesInvoiceService
+    public interface SalesInvoiceService
     {
+        void Add(AddSalesInvoiceDto dto);
     }
 }

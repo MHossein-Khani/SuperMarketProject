@@ -1,4 +1,5 @@
-﻿using SuperMarket.Services.SalesInvoices.Contracts;
+﻿using SuperMarket.Entities;
+using SuperMarket.Services.SalesInvoices.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,9 @@ namespace SuperMarket.Persistance.EF.SalesInvoices
             _dataContext = dataContext;
         }
 
-
+        public void Add(SalesInvoice salesInvoice)
+        {
+            _dataContext.SalesInvoices.Add(salesInvoice);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SuperMarket.Infrastructure.Application;
+﻿using SuperMarket.Entities;
+using SuperMarket.Infrastructure.Application;
 using SuperMarket.Services.SalesInvoices.Contracts;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,21 @@ namespace SuperMarket.Services.SalesInvoices
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
+        }
+
+        public void Add(AddSalesInvoiceDto dto)
+        {
+            var salesInvoice = new SalesInvoice
+            {
+                CodeOfProduct = dto.CodeOfProduct,
+                NameOfProduct = dto.NameOfProduct,
+                Number = dto.Number,
+                Date = dto.Date,
+                ProductId = dto.ProductId,
+            };
+
+            _repository.Add(salesInvoice);
+            _unitOfWork.Commit();
         }
     }
 }
