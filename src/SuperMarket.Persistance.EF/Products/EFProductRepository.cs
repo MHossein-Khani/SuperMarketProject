@@ -31,5 +31,10 @@ namespace SuperMarket.Persistance.EF.Products
         {
             return _dataContext.products.Find(id);
         }
+
+        public int countOfProductCode(string code)
+        {
+            return _dataContext.products.Where(p => p.Code == code).Count();    
+        }
     }
 }

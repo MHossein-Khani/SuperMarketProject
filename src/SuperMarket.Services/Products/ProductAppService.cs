@@ -43,6 +43,12 @@ namespace SuperMarket.Services.Products
         {
             var product = _productRepository.FindById(id);
 
+            var isCodeExist = _productRepository.IsProductCodeExist(dto.Code);
+            if (isCodeExist)
+            {
+                throw new CategoryCodeIsAlreadyExistException();
+            }
+
             product.Code = dto.Code;
             product.Name = dto.Name;
             product.MinimumInventory = dto.MinimumInventory;

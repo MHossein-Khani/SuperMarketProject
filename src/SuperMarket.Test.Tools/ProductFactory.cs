@@ -9,11 +9,11 @@ namespace SuperMarket.Test.Tools
 {
     public static class ProductFactory
     {
-        public static Product CreatProduct(int ctegoryId)
+        public static Product CreatProduct(string code, int ctegoryId)
         {
             return new Product
             {
-                Code = "1",
+                Code = code,
                 Name = "شیر کاله",
                 MinimumInventory = 5,
                 Price = 5000,

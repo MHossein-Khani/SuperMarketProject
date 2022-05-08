@@ -12,5 +12,6 @@ namespace SuperMarket.Services.Products.Cantracts
         void Add(Product product);
         bool IsProductCodeExist(string code);
         Product FindById(int id);
+        int countOfProductCode(string code);
     }
 }

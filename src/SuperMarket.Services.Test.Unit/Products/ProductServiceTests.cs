@@ -53,7 +53,7 @@ namespace SuperMarket.Services.Test.Unit.Products
             var category = CategoryFactory.CreateCategory("لبنیات");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            var product = ProductFactory.CreatProduct(category.Id);
+            var product = ProductFactory.CreatProduct("1", category.Id);
             _dataContext.Manipulate(_ => _.products.Add(product));
 
             var dto = GenerateAddProductDto(category.Id);
@@ -68,7 +68,7 @@ namespace SuperMarket.Services.Test.Unit.Products
             var category = CategoryFactory.CreateCategory("لبنیات");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            var product = ProductFactory.CreatProduct(category.Id);
+            var product = ProductFactory.CreatProduct("1", category.Id);
             _dataContext.Manipulate(_ => _.products.Add(product));
 
             var dto = GenerateUpdateProductDto(category.Id);
@@ -83,7 +83,22 @@ namespace SuperMarket.Services.Test.Unit.Products
             expected.CategoryId.Should().Be(dto.CategoryId);
         }
 
+        [Fact]
+        public void Throw_Exception_if_CategoryCodeIsAlreadyExistException_when_updete_a_product_to_a_duplicate_code()
+        {
+            var category = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
 
+            var product1 = ProductFactory.CreatProduct("1", category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product1));
+
+            var product2 = ProductFactory.CreatProduct("2", category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product2));
+
+            var dto = GenerateUpdateProductDto(category.Id);
+            Action expected = () => _sut.Update(dto, category.Id);
+            expected.Should().ThrowExactly<CategoryCodeIsAlreadyExistException>();
+        }
 
 
         private static AddProductDto GenerateAddProductDto(int categoryId)
