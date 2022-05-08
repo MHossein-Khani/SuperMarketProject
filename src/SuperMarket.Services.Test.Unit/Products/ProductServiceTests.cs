@@ -55,7 +55,7 @@ namespace SuperMarket.Services.Test.Unit.Products
             var category = CategoryFactory.CreateCategory("لبنیات");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            var product = ProductFactory.CreatProduct("1", category.Id);
+            var product = ProductFactory.CreatProduct("1", 10, category.Id);
             _dataContext.Manipulate(_ => _.products.Add(product));
 
             var dto = GenerateAddProductDto(category.Id);
@@ -70,7 +70,7 @@ namespace SuperMarket.Services.Test.Unit.Products
             var category = CategoryFactory.CreateCategory("لبنیات");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            var product = ProductFactory.CreatProduct("1", category.Id);
+            var product = ProductFactory.CreatProduct("1", 10, category.Id);
             _dataContext.Manipulate(_ => _.products.Add(product));
 
             var dto = GenerateUpdateProductDto(category.Id);
@@ -91,10 +91,10 @@ namespace SuperMarket.Services.Test.Unit.Products
             var category = CategoryFactory.CreateCategory("لبنیات");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            var product1 = ProductFactory.CreatProduct("1", category.Id);
+            var product1 = ProductFactory.CreatProduct("1", 10, category.Id);
             _dataContext.Manipulate(_ => _.products.Add(product1));
 
-            var product2 = ProductFactory.CreatProduct("2", category.Id);
+            var product2 = ProductFactory.CreatProduct("2", 10, category.Id);
             _dataContext.Manipulate(_ => _.products.Add(product2));
 
             var dto = GenerateUpdateProductDto(category.Id);
@@ -130,7 +130,7 @@ namespace SuperMarket.Services.Test.Unit.Products
 
             Create_list_of_products(category.Id, category2.Id);
 
-            
+
             var expected = _sut.GetAll();
 
             expected.Should().HaveCount(2);
@@ -142,7 +142,7 @@ namespace SuperMarket.Services.Test.Unit.Products
             var category = CategoryFactory.CreateCategory("لبنیات");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            var product = ProductFactory.CreatProduct("1", category.Id);
+            var product = ProductFactory.CreatProduct("1", 10, category.Id);
             _dataContext.Manipulate(_ => _.products.Add(product));
 
             _sut.Delete(product.Id);
@@ -156,7 +156,7 @@ namespace SuperMarket.Services.Test.Unit.Products
             var category = CategoryFactory.CreateCategory("لبنیات");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            var product = ProductFactory.CreatProduct("1", category.Id);
+            var product = ProductFactory.CreatProduct("1", 10, category.Id);
             _dataContext.Manipulate(_ => _.products.Add(product));
 
             var salesInvoice = SalesInvoiceFactory.
@@ -165,7 +165,6 @@ namespace SuperMarket.Services.Test.Unit.Products
 
             Action expected = () => _sut.Delete(product.Id);
             expected.Should().ThrowExactly<ProductUsedInSalesInvoiceException>();
-
         }
 
         private static AddProductDto GenerateAddProductDto(int categoryId)

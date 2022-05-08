@@ -10,5 +10,7 @@ namespace SuperMarket.Services.SalesInvoices.Contracts
     public interface SalesInvoiceRepository
     {
         void Add(SalesInvoice salesInvoice);
+
+        int NumberOfProductInventory(int productId);
     }
 }

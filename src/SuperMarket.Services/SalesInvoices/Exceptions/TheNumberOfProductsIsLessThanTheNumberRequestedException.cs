@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SuperMarket.Services.SalesInvoices.Exceptions
 {
-    public class ProductInventoryIsFinishedException : Exception
+    public class TheNumberOfProductsIsLessThanTheNumberRequestedException : Exception
     {
     }
 }

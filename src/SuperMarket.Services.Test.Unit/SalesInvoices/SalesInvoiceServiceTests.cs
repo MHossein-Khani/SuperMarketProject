@@ -10,6 +10,7 @@ using SuperMarket.Services.Categories.Contracts;
 using SuperMarket.Services.Categories.Exceptions;
 using SuperMarket.Services.SalesInvoices;
 using SuperMarket.Services.SalesInvoices.Contracts;
+using SuperMarket.Services.SalesInvoices.Exceptions;
 using SuperMarket.Test.Tools;
 using System;
 using System.Collections.Generic;
@@ -40,7 +41,7 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
             var category = CategoryFactory.CreateCategory("لبنیات");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            var product = ProductFactory.CreatProduct("1", category.Id);
+            var product = ProductFactory.CreatProduct("1", 10,category.Id);
             _dataContext.Manipulate(_ => _.products.Add(product));
 
             AddSalesInvoiceDto dto = GenerateAddProductDto(product);
@@ -59,6 +60,22 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
 
             var expectedProduct = _dataContext.products.FirstOrDefault();
             expectedProduct.Inventory.Should().Be(8);
+        }
+
+        [Fact]
+        public void Throw_exception_if_ProductInventoryIsFinishedException_when_add_sales_invoice_that_the_inventory_of_product_is_zero()
+        {
+            var category = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            var product = ProductFactory.CreatProduct("1", 0, category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product));
+
+            AddSalesInvoiceDto dto = GenerateAddProductDto(product);
+
+            Action expected = () => _sut.Add(dto);
+            _dataContext.SalesInvoices.Should().HaveCount(0);
+            expected.Should().ThrowExactly<TheNumberOfProductsIsLessThanTheNumberRequestedException>();
         }
 
         private static AddSalesInvoiceDto GenerateAddProductDto(Product product)

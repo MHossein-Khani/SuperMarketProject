@@ -136,7 +136,7 @@ namespace SuperMarket.Services.Test.Unit.Categories
             var category = CategoryFactory.CreateCategory("لبنیات");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            var product = ProductFactory.CreatProduct("1", category.Id);
+            var product = ProductFactory.CreatProduct("1", 10,category.Id);
             _dataContext.Manipulate(_ => _.products.Add(product));
 
             Action expected = () => _sut.Delete(category.Id);
