@@ -10,5 +10,6 @@ namespace SuperMarket.Services.Products.Cantracts
     {
         void Add(AddProductDto dto);
         void Update(UpdateProductDto dto, int id);
+        List<GetProductDto> Get(int categoryId);
     }
 }

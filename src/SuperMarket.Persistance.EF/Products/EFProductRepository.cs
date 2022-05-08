@@ -36,5 +36,22 @@ namespace SuperMarket.Persistance.EF.Products
         {
             return _dataContext.products.Where(p => p.Code == code).Count();    
         }
+
+        public List<GetProductDto> Get(int categoryId)
+        {
+            return _dataContext.products.
+                Where(p => p.CategoryId == categoryId).
+                Select(p => new GetProductDto
+                {
+                    Code = p.Code,
+                    Name = p.Name,
+                    Inventory = p.Inventory,
+                    Price = p.Price,
+                    MinimumInventory = p.MinimumInventory,
+                    CategoryId = p.CategoryId
+                }).ToList();
+                
+
+        }
     }
 }

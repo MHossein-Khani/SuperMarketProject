@@ -2,6 +2,7 @@
 using SuperMarket.Infrastructure.Application;
 using SuperMarket.Services.Products.Cantracts;
 using SuperMarket.Services.Products.Exceptions;
+using System.Collections.Generic;
 
 namespace SuperMarket.Services.Products
 {
@@ -37,6 +38,11 @@ namespace SuperMarket.Services.Products
 
             _productRepository.Add(product);
             _unitOfWork.Commit();
+        }
+
+        public List<GetProductDto> Get(int categoryId)
+        {
+            return _productRepository.Get(categoryId);
         }
 
         public void Update(UpdateProductDto dto, int id)
