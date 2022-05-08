@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using SuperMarket.Entities;
 using SuperMarket.Infrastructure.Application;
 using SuperMarket.Infrastructure.Test;
 using SuperMarket.Persistance.EF;
@@ -8,6 +9,7 @@ using SuperMarket.Services.Products.Cantracts;
 using SuperMarket.Services.Products.Exceptions;
 using SuperMarket.Test.Tools;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -100,6 +102,23 @@ namespace SuperMarket.Services.Test.Unit.Products
             expected.Should().ThrowExactly<CategoryCodeIsAlreadyExistException>();
         }
 
+        [Fact]
+        public void Get_returns_products_by_category_id_properly()
+        {
+            var category = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            Create_list_of_products(category.Id);
+
+            var dto = new GetProductDto
+            {
+                CategoryId = category.Id
+            };
+            var expected = _sut.Get(dto.CategoryId);
+
+            expected.Should().HaveCount(2);
+        }
+
 
         private static AddProductDto GenerateAddProductDto(int categoryId)
         {
@@ -125,6 +144,34 @@ namespace SuperMarket.Services.Test.Unit.Products
                 Inventory = 5,
                 CategoryId = categoryId
             };
+        }
+
+        private void Create_list_of_products(int categoryId)
+        {
+            var products = new List<Product>
+            {
+                new Product
+                {
+                    Code = "1",
+                    Name = "شیر کاله",
+                    MinimumInventory = 5,
+                    Price = 5000,
+                    Inventory = 10,
+                    CategoryId = categoryId
+                },
+
+                new Product
+                {
+                    Code = "2",
+                    Name = "test",
+                    MinimumInventory = 8,
+                    Price = 10000,
+                    Inventory = 9,
+                    CategoryId = categoryId
+                },
+            };
+
+            _dataContext.Manipulate(_ => _.products.AddRange(products));
         }
     }
 }

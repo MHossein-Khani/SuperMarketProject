@@ -50,8 +50,6 @@ namespace SuperMarket.Persistance.EF.Products
                     MinimumInventory = p.MinimumInventory,
                     CategoryId = p.CategoryId
                 }).ToList();
-                
-
         }
     }
 }
