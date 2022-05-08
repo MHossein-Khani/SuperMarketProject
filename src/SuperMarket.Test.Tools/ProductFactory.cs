@@ -9,7 +9,7 @@ namespace SuperMarket.Test.Tools
 {
     public static class ProductFactory
     {
-        public static Product CreatProduct(string code, int ctegoryId)
+        public static Product CreatProduct(string code,int inventory , int ctegoryId)
         {
             return new Product
             {
@@ -17,7 +17,7 @@ namespace SuperMarket.Test.Tools
                 Name = "شیر کاله",
                 MinimumInventory = 5,
                 Price = 5000,
-                Inventory = 10,
+                Inventory = inventory,
                 CategoryId = ctegoryId
             };
         }

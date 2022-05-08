@@ -41,7 +41,7 @@ namespace SuperMarket.Specs.Products
         [And("کالای با کد '1' در دسته بندی 'لبنیات' وجود دارد")]
         public void GivenAnd()
         {
-            _product = ProductFactory.CreatProduct("1", _category.Id);
+            _product = ProductFactory.CreatProduct("1", 10, _category.Id);
             _dataContext.Manipulate(_ => _.products.Add(_product));
         }
 

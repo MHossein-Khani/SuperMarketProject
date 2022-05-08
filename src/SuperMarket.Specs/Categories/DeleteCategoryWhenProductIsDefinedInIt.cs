@@ -48,7 +48,7 @@ namespace SuperMarket.Specs.Categories
         [And("در دسته بندی 'لبنیات' کالای 'شیر' وجود دارد")]
         public void And()
         {
-            var product = ProductFactory.CreatProduct("1",_category.Id);
+            var product = ProductFactory.CreatProduct("1", 10, _category.Id);
             _dataContext.Manipulate(_ => _.products.Add(product));
         }
 
