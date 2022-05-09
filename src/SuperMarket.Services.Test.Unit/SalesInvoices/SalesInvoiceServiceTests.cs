@@ -125,13 +125,18 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
             _dataContext.Manipulate(_ => _.SalesInvoices.Add(salesInvoice));
 
             UpdateSalesInvoiceDto dto = GenerateUpdateSalesInvoiceDto(product2);
+
             Action expected = () => _sut.Update(dto, salesInvoice.Id);
             expected.Should().ThrowExactly<InventoryIsOutOfStockException>();
             var expectedSalesInvoice = _dataContext.SalesInvoices.FirstOrDefault();
             expectedSalesInvoice.CodeOfProduct.Should().Be(product1.Code);
 
-            
+
         }
+
+
+
+
 
         private static UpdateSalesInvoiceDto GenerateUpdateSalesInvoiceDto(Product product2)
         {

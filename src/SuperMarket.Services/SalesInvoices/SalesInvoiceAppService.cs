@@ -2,11 +2,6 @@
 using SuperMarket.Infrastructure.Application;
 using SuperMarket.Services.SalesInvoices.Contracts;
 using SuperMarket.Services.SalesInvoices.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SuperMarket.Services.SalesInvoices
 {
@@ -60,6 +55,8 @@ namespace SuperMarket.Services.SalesInvoices
             salesInvoice.TotalCost = dto.TotalCost;
             salesInvoice.Date = dto.Date;
             salesInvoice.ProductId = dto.ProductId;
+
+            _unitOfWork.Commit();
         }
     }
 }

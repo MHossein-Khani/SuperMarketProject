@@ -85,9 +85,9 @@ namespace SuperMarket.Specs.SalesInvoices
                 Number = 2,
                 TotalCost = 15000,
                 Date = new DateTime(05 / 02 / 2022)
-                
+
             };
-           expected = () => _sut.Update(_dto, _salesInvoice.Id);
+            expected = () => _sut.Update(_dto, _salesInvoice.Id);
         }
 
         [Then("فاکتور فروش با کد کالا '1' با نام کالا شیر کاله  " +

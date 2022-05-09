@@ -97,7 +97,7 @@ namespace SuperMarket.Specs.SalesInvoices
         public void ThenAnd()
         {
             _product.Inventory -= _dto.Number;
-            _dataContext.Manipulate(_ => _.products.Add(_product));
+            _dataContext.Manipulate(_ => _.products.Update(_product));
             var expectedProduct = _dataContext.products.FirstOrDefault();
             expectedProduct.Inventory.Should().Be(8);
         }
@@ -109,6 +109,7 @@ namespace SuperMarket.Specs.SalesInvoices
             And();
             When();
             Then();
+            ThenAnd();
         }
     }
 }

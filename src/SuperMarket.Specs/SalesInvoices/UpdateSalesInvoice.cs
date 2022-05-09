@@ -78,7 +78,12 @@ namespace SuperMarket.Specs.SalesInvoices
         {
             _dto = new UpdateSalesInvoiceDto
             {
-                CodeOfProduct = _product2.Code
+                CodeOfProduct = _product2.Code,
+                NameOfProduct = _product2.Name,
+                Number = 2,
+                TotalCost = 15000,
+                Date = new DateTime(05 / 02 / 2022),
+                ProductId = _product2.Id,
             };
             _sut.Update(_dto, _salesInvoice.Id);
         }
@@ -95,8 +100,9 @@ namespace SuperMarket.Specs.SalesInvoices
         public void ThenAnd()
         {
             _product2.Inventory -= _dto.Number;
-            _dataContext.Manipulate(_ => _.products.Add(_product2));
-            var expectedProduct = _dataContext.products.FirstOrDefault();
+            _dataContext.Manipulate(_ => _.products.Update(_product2));
+            var expectedProduct = _dataContext.products.
+               FirstOrDefault(p => p.Id == _product2.Id);
             expectedProduct.Inventory.Should().Be(8);
         }
 
@@ -108,6 +114,7 @@ namespace SuperMarket.Specs.SalesInvoices
             And();
             When();
             Then();
+            ThenAnd();
         }
     }
 }
