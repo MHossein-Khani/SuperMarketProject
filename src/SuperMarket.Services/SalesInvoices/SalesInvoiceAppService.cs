@@ -56,6 +56,11 @@ namespace SuperMarket.Services.SalesInvoices
             return _repository.GetByCategory(categoryId);
         }
 
+        public List<GetSalesInvoiceDto> GetByProduct(int productId)
+        {
+            return _repository.GetByProduct(productId);
+        }
+
         public void Update(UpdateSalesInvoiceDto dto, int id)
         {
             int productInventory = _repository.

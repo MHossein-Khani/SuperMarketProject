@@ -161,6 +161,23 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
             expected.Should().HaveCount(2);
         }
 
+        [Fact]
+        public void GetByProduct_returns_all_salesInvoices_that_have_same_product()
+        {
+            var category = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            var product = ProductFactory.CreatProduct("1", 8, category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product));
+
+            Create_a_list_of_sales_invoice(product.Code, product.Name, product.Id);
+
+            var expected = _sut.GetByProduct(product.Id);
+            expected.Should().HaveCount(2);
+        }
+
+
+
         private static UpdateSalesInvoiceDto GenerateUpdateSalesInvoiceDto(Product product2)
         {
             return new UpdateSalesInvoiceDto
@@ -212,6 +229,34 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
                 }
             };
             _dataContext.Manipulate(_ => _.SalesInvoices.AddRange(salesInvoices));
+        }
+
+        private void Create_a_list_of_sales_invoice(string productCode,
+            string productName, int productId)
+        {
+            var salesInvoice = new List<SalesInvoice>
+            {
+                new SalesInvoice
+                {
+                CodeOfProduct = productCode,
+                NameOfProduct = productName,
+                Number = 2,
+                TotalCost = 10000,
+                Date = new DateTime(05 / 02 / 2022),
+                ProductId = productId,
+                },
+
+                new SalesInvoice
+                {
+                CodeOfProduct = productCode,
+                NameOfProduct = productName,
+                Number = 4,
+                TotalCost = 10000,
+                Date = new DateTime(05 / 02 / 2022),
+                ProductId = productId,
+                },
+            };
+            _dataContext.Manipulate(_ => _.SalesInvoices.AddRange(salesInvoice));
         }
 
     }

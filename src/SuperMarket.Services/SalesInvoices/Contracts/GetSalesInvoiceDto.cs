@@ -16,6 +16,5 @@ namespace SuperMarket.Services.SalesInvoices.Contracts
         public DateTime Date { get; set; }
         public int TotalCost { get; set; }
 
-        public Product Product { get; set; }
     }
 }

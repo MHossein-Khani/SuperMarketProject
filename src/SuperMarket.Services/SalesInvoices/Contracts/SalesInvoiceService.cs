@@ -13,5 +13,6 @@ namespace SuperMarket.Services.SalesInvoices
         void Update(UpdateSalesInvoiceDto dto, int id);
         void Delete(int id);
         List<GetSalesInvoiceDto> GetByCategory(int categoryId);
+        List<GetSalesInvoiceDto> GetByProduct(int productId);
     }
 }
