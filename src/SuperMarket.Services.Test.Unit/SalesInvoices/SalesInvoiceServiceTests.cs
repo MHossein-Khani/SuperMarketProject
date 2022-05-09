@@ -108,6 +108,31 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
             expectedProduct.Inventory.Should().Be(8);
         }
 
+        [Fact]
+        public void Throw_exception_if_InventoryIsOutOfStockException_when_updating_a_salesInvoice_to_another_product()
+        {
+            var category = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            var product1 = ProductFactory.CreatProduct("1", 8, category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product1));
+
+            var product2 = ProductFactory.CreatProduct("2", 0, category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product2));
+
+            var salesInvoice = SalesInvoiceFactory.
+               CreateSalesInvoice(product1.Code, product1.Name, product1.Id);
+            _dataContext.Manipulate(_ => _.SalesInvoices.Add(salesInvoice));
+
+            UpdateSalesInvoiceDto dto = GenerateUpdateSalesInvoiceDto(product2);
+            Action expected = () => _sut.Update(dto, salesInvoice.Id);
+            expected.Should().ThrowExactly<InventoryIsOutOfStockException>();
+            var expectedSalesInvoice = _dataContext.SalesInvoices.FirstOrDefault();
+            expectedSalesInvoice.CodeOfProduct.Should().Be(product1.Code);
+
+            
+        }
+
         private static UpdateSalesInvoiceDto GenerateUpdateSalesInvoiceDto(Product product2)
         {
             return new UpdateSalesInvoiceDto

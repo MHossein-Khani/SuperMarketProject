@@ -25,7 +25,6 @@ namespace SuperMarket.Services.SalesInvoices
         {
             var productInventory = _repository.
                 NumberOfProductInventory(dto.ProductId);
-
             if (productInventory < dto.Number)
             {
                 throw new TheNumberOfProductsIsLessThanTheNumberRequestedException();
@@ -46,6 +45,13 @@ namespace SuperMarket.Services.SalesInvoices
 
         public void Update(UpdateSalesInvoiceDto dto, int id)
         {
+            int productInventory = _repository.
+              NumberOfProductInventory(dto.ProductId);
+            if (productInventory < dto.Number)
+            {
+                throw new InventoryIsOutOfStockException();
+            }
+
             var salesInvoice = _repository.FindById(id);
 
             salesInvoice.CodeOfProduct = dto.CodeOfProduct;

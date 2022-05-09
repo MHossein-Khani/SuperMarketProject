@@ -15,7 +15,6 @@ using static SuperMarket.Specs.BDDHelper;
 
 namespace SuperMarket.Specs.SalesInvoices
 {
-
     [Scenario(".ویرایش فاکتور فروش")]
     [Feature("",
            AsA = "فروشنده ",
