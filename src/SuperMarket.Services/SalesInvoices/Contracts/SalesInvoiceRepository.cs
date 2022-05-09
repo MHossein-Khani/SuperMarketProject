@@ -17,6 +17,6 @@ namespace SuperMarket.Services.SalesInvoices.Contracts
         void Delete(SalesInvoice salesInvoice);
         List<GetSalesInvoiceDto> GetByCategory(int categoryId);
         List<GetSalesInvoiceDto> GetByProduct(int productId);
-
+        List<GetSalesInvoiceDto> GetAll();
     }
 }

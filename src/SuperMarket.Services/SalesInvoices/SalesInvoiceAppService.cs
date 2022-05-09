@@ -51,6 +51,11 @@ namespace SuperMarket.Services.SalesInvoices
             _unitOfWork.Commit();
         }
 
+        public List<GetSalesInvoiceDto> GetAll()
+        {
+            return _repository.GetAll();
+        }
+
         public List<GetSalesInvoiceDto> GetByCategory(int categoryId)
         {
             return _repository.GetByCategory(categoryId);

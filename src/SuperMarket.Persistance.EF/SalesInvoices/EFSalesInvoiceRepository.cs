@@ -79,12 +79,27 @@ namespace SuperMarket.Persistance.EF.SalesInvoices
                  Where(p => p.ProductId == productId).
                  Select(p => new GetSalesInvoiceDto
                  {
+                     Id = p.Id,
                      CodeOfProduct = p.CodeOfProduct,
                      NameOfProduct = p.NameOfProduct,
                      Number = p.Number,
                      TotalCost = p.TotalCost,
                      Date = p.Date,
                  }).ToList();
+        }
+
+        public List<GetSalesInvoiceDto> GetAll()
+        {
+            return _dataContext.SalesInvoices.
+                Select(p => new GetSalesInvoiceDto
+                {
+                    Id = p.Id,
+                    CodeOfProduct = p.CodeOfProduct,
+                    NameOfProduct = p.NameOfProduct,
+                    Number = p.Number,
+                    TotalCost = p.TotalCost,
+                    Date = p.Date,
+                }).ToList();
         }
     }
 }

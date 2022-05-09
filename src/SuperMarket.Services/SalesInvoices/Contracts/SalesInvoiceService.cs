@@ -1,9 +1,5 @@
 ﻿using SuperMarket.Services.SalesInvoices.Contracts;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SuperMarket.Services.SalesInvoices
 {
@@ -14,5 +10,6 @@ namespace SuperMarket.Services.SalesInvoices
         void Delete(int id);
         List<GetSalesInvoiceDto> GetByCategory(int categoryId);
         List<GetSalesInvoiceDto> GetByProduct(int productId);
+        List<GetSalesInvoiceDto> GetAll();
     }
 }

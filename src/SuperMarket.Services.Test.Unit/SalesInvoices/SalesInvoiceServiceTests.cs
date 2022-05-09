@@ -3,11 +3,7 @@ using SuperMarket.Entities;
 using SuperMarket.Infrastructure.Application;
 using SuperMarket.Infrastructure.Test;
 using SuperMarket.Persistance.EF;
-using SuperMarket.Persistance.EF.Categories;
 using SuperMarket.Persistance.EF.SalesInvoices;
-using SuperMarket.Services.Categories;
-using SuperMarket.Services.Categories.Contracts;
-using SuperMarket.Services.Categories.Exceptions;
 using SuperMarket.Services.SalesInvoices;
 using SuperMarket.Services.SalesInvoices.Contracts;
 using SuperMarket.Services.SalesInvoices.Exceptions;
@@ -176,6 +172,29 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
             expected.Should().HaveCount(2);
         }
 
+        [Fact]
+        public void GetAll_returns_all_salesInvoices_properly()
+        {
+            var category1 = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category1));
+
+            var category2 = CategoryFactory.CreateCategory("خشکبار");
+            _dataContext.Manipulate(_ => _.Categories.Add(category2));
+
+            var product1 = ProductFactory.CreatProduct("1", 15, category1.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product1));
+
+            var product2 = ProductFactory.CreatProduct("2", 15, category2.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product2));
+
+            Generate_a_list_of_salesInvoice
+                (product1.Code, product1.Name, product1.Id,
+                product2.Code, product2.Name, product2.Id);
+
+            var expected = _sut.GetAll();
+            expected.Should().HaveCount(2);
+        }
+
 
 
         private static UpdateSalesInvoiceDto GenerateUpdateSalesInvoiceDto(Product product2)
@@ -258,6 +277,8 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
             };
             _dataContext.Manipulate(_ => _.SalesInvoices.AddRange(salesInvoice));
         }
+
+     
 
     }
 }
