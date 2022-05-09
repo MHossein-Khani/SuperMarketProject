@@ -16,6 +16,7 @@ namespace SuperMarket.Test.Tools
                 CodeOfProduct = code,
                 NameOfProduct = name,
                 Number = 2,
+                TotalCost = 10000,
                 Date = new DateTime(05 / 02 / 2022),
                 ProductId = productId,
             };

@@ -67,6 +67,7 @@ namespace SuperMarket.Specs.SalesInvoices
                 CodeOfProduct = _product.Code,
                 NameOfProduct = _product.Name,
                 Number = 2,
+                TotalCost = 10000,
                 Date = new DateTime(05 / 02 / 2022),
                 ProductId = _product.Id,
             };
@@ -97,6 +98,8 @@ namespace SuperMarket.Specs.SalesInvoices
         {
             _product.Inventory -= _dto.Number;
             _dataContext.Manipulate(_ => _.products.Add(_product));
+            var expectedProduct = _dataContext.products.FirstOrDefault();
+            expectedProduct.Inventory.Should().Be(8);
         }
 
         [Fact]

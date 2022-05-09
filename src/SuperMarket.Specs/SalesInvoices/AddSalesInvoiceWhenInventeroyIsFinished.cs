@@ -78,7 +78,7 @@ namespace SuperMarket.Specs.SalesInvoices
         [And("خطایی با عنوان ' موجودی کالا به اتمام رسیده است' باید رخ دهد")]
         public void AndThen()
         {
-            expected.Should().ThrowExactly<ProductInventoryIsFinishedException>();
+            expected.Should().ThrowExactly<TheNumberOfProductsIsLessThanTheNumberRequestedException>();
         }
 
         [Fact]

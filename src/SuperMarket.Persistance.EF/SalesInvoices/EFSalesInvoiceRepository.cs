@@ -22,6 +22,11 @@ namespace SuperMarket.Persistance.EF.SalesInvoices
             _dataContext.SalesInvoices.Add(salesInvoice);
         }
 
+        public SalesInvoice FindById(int id)
+        {
+            return _dataContext.SalesInvoices.Find(id);
+        }
+
         public int NumberOfProductInventory(int productId)
         {
             var product = _dataContext.products.FirstOrDefault(p => p.Id == productId);

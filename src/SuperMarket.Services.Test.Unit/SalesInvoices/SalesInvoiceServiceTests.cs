@@ -78,6 +78,50 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
             expected.Should().ThrowExactly<TheNumberOfProductsIsLessThanTheNumberRequestedException>();
         }
 
+        [Fact]
+        public void Update_updates_a_salesInvoice_properly()
+        {
+            var category = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            var product1 = ProductFactory.CreatProduct("1", 8, category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product1));
+
+            var product2 = ProductFactory.CreatProduct("2", 10, category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product2));
+
+            var salesInvoice = SalesInvoiceFactory.
+               CreateSalesInvoice(product1.Code, product1.Name, product1.Id);
+            _dataContext.Manipulate(_ => _.SalesInvoices.Add(salesInvoice));
+
+            UpdateSalesInvoiceDto dto = GenerateUpdateSalesInvoiceDto(product2);
+            _sut.Update(dto, salesInvoice.Id);
+
+            var expected = _dataContext.SalesInvoices.FirstOrDefault();
+            expected.CodeOfProduct.Should().Be(dto.CodeOfProduct);
+
+            product2.Inventory -= dto.Number;
+            _dataContext.Manipulate(_ => _.products.Update(product2));
+
+            var expectedProduct = _dataContext.products.
+                FirstOrDefault(p => p.Id == product2.Id);
+            expectedProduct.Inventory.Should().Be(8);
+        }
+
+        private static UpdateSalesInvoiceDto GenerateUpdateSalesInvoiceDto(Product product2)
+        {
+            return new UpdateSalesInvoiceDto
+            {
+                CodeOfProduct = product2.Code,
+                NameOfProduct = product2.Name,
+                Number = 2,
+                TotalCost = 10000,
+                Date = new DateTime(05 / 02 / 2020),
+                ProductId = product2.Id,
+            };
+        }
+
+
         private static AddSalesInvoiceDto GenerateAddProductDto(Product product)
         {
             return new AddSalesInvoiceDto

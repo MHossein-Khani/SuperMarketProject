@@ -1,6 +1,7 @@
 ﻿using SuperMarket.Entities;
 using SuperMarket.Infrastructure.Application;
 using SuperMarket.Services.SalesInvoices.Contracts;
+using SuperMarket.Services.SalesInvoices.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,14 @@ namespace SuperMarket.Services.SalesInvoices
 
         public void Add(AddSalesInvoiceDto dto)
         {
+            var productInventory = _repository.
+                NumberOfProductInventory(dto.ProductId);
+
+            if (productInventory < dto.Number)
+            {
+                throw new TheNumberOfProductsIsLessThanTheNumberRequestedException();
+            }
+
             var salesInvoice = new SalesInvoice
             {
                 CodeOfProduct = dto.CodeOfProduct,
@@ -33,6 +42,18 @@ namespace SuperMarket.Services.SalesInvoices
 
             _repository.Add(salesInvoice);
             _unitOfWork.Commit();
+        }
+
+        public void Update(UpdateSalesInvoiceDto dto, int id)
+        {
+            var salesInvoice = _repository.FindById(id);
+
+            salesInvoice.CodeOfProduct = dto.CodeOfProduct;
+            salesInvoice.NameOfProduct = dto.NameOfProduct;
+            salesInvoice.Number = dto.Number;
+            salesInvoice.TotalCost = dto.TotalCost;
+            salesInvoice.Date = dto.Date;
+            salesInvoice.ProductId = dto.ProductId;
         }
     }
 }
