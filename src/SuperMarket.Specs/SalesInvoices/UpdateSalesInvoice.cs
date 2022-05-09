@@ -95,15 +95,12 @@ namespace SuperMarket.Specs.SalesInvoices
             expected.CodeOfProduct.Should().Be(_dto.CodeOfProduct);
         }
 
-        [And(" '8  یاید وجود داشته باشد کالایی با کد '1'" +
-            " با موجودی '10 وکالایی با کد '2 با موجودی  ")]
+        [And("کالا با کد '1' با موجودی '10' و کالا با کد کالای '2' " +
+            "با موجودی '8' باید در فهرست کالا وجود داشته باشد ")]
         public void ThenAnd()
         {
-            _product2.Inventory -= _dto.Number;
-            _dataContext.Manipulate(_ => _.products.Update(_product2));
-            var expectedProduct = _dataContext.products.
-               FirstOrDefault(p => p.Id == _product2.Id);
-            expectedProduct.Inventory.Should().Be(8);
+            _product1.Inventory.Should().Be(10);
+            _product2.Inventory.Should().Be(8);
         }
 
         [Fact]

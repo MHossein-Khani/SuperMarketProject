@@ -54,12 +54,7 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
             expected.Number.Should().Be(dto.Number);
             expected.Date.Should().Be(dto.Date);
             expected.ProductId.Should().Be(dto.ProductId);
-
-            product.Inventory -= dto.Number;
-            _dataContext.Manipulate(_ => _.products.Update(product));
-
-            var expectedProduct = _dataContext.products.FirstOrDefault();
-            expectedProduct.Inventory.Should().Be(8);
+            product.Inventory.Should().Be(8);
         }
 
         [Fact]
@@ -99,13 +94,8 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
 
             var expected = _dataContext.SalesInvoices.FirstOrDefault();
             expected.CodeOfProduct.Should().Be(dto.CodeOfProduct);
-
-            product2.Inventory -= dto.Number;
-            _dataContext.Manipulate(_ => _.products.Update(product2));
-
-            var expectedProduct = _dataContext.products.
-                FirstOrDefault(p => p.Id == product2.Id);
-            expectedProduct.Inventory.Should().Be(8);
+            product1.Inventory.Should().Be(10);
+            product2.Inventory.Should().Be(8);
         }
 
         [Fact]
@@ -130,13 +120,46 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
             expected.Should().ThrowExactly<InventoryIsOutOfStockException>();
             var expectedSalesInvoice = _dataContext.SalesInvoices.FirstOrDefault();
             expectedSalesInvoice.CodeOfProduct.Should().Be(product1.Code);
-
-
         }
 
+        [Fact]
+        public void Delete_deletes_a_salesInvoice_properly()
+        {
+            var category = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
 
+            var product = ProductFactory.CreatProduct("1", 8, category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product));
 
+            var salesInvoice = SalesInvoiceFactory.
+               CreateSalesInvoice(product.Code, product.Name, product.Id);
+            _dataContext.Manipulate(_ => _.SalesInvoices.Add(salesInvoice));
 
+            _sut.Delete(salesInvoice.Id);
+
+            _dataContext.SalesInvoices.Should().HaveCount(0);
+            product.Inventory.Should().Be(10);
+        }
+
+        [Fact]
+        public void GetByCategory_returns_all_salesInvoices_that_have_the_same_category()
+        {
+            var category = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            var product1 = ProductFactory.CreatProduct("1", 8, category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product1));
+
+            var product2 = ProductFactory.CreatProduct("2", 10, category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product2));
+
+            Generate_a_list_of_salesInvoice
+                (product1.Code, product1.Name, product1.Id,
+                product2.Code, product2.Name, product2.Id);
+
+            var expected = _sut.GetByCategory(category.Id);
+            expected.Should().HaveCount(2);
+        }
 
         private static UpdateSalesInvoiceDto GenerateUpdateSalesInvoiceDto(Product product2)
         {
@@ -151,7 +174,6 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
             };
         }
 
-
         private static AddSalesInvoiceDto GenerateAddProductDto(Product product)
         {
             return new AddSalesInvoiceDto
@@ -163,5 +185,34 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
                 ProductId = product.Id,
             };
         }
+
+        private void Generate_a_list_of_salesInvoice
+            (string productCode1, string productName1,int productId1,
+            string productCode2, string productName2, int productId2)
+        {
+            var salesInvoices = new List<SalesInvoice>()
+            {
+                new SalesInvoice()
+                {
+                    CodeOfProduct = productCode1,
+                    NameOfProduct = productName1,
+                    Number = 2,
+                    TotalCost = 10000,
+                    Date = new DateTime(05/02/2022),
+                    ProductId = productId1,
+                },
+                new SalesInvoice()
+                {
+                    CodeOfProduct = productCode2,
+                    NameOfProduct = productName2,
+                    Number = 2,
+                    TotalCost = 15000,
+                    Date = new DateTime(05/02/2022),
+                    ProductId = productId2,
+                }
+            };
+            _dataContext.Manipulate(_ => _.SalesInvoices.AddRange(salesInvoices));
+        }
+
     }
 }

@@ -19,7 +19,9 @@ namespace SuperMarket.Persistance.EF.SalesInvoices
 
         public void Add(SalesInvoice salesInvoice)
         {
+           
             _dataContext.SalesInvoices.Add(salesInvoice);
+            
         }
 
         public SalesInvoice FindById(int id)
@@ -34,6 +36,39 @@ namespace SuperMarket.Persistance.EF.SalesInvoices
             var inventory = product.Inventory;
 
             return inventory;
+        }
+
+        public void ReduceInventory(int productId, int salesNumber)
+        {
+            var product =  _dataContext.products.
+                FirstOrDefault(p => p.Id == productId);
+            product.Inventory -= salesNumber;
+        }
+
+        public void AddInventory(int productId, int salesNumber)
+        {
+            var product = _dataContext.products.
+                FirstOrDefault(p => p.Id == productId);
+            product.Inventory += salesNumber;
+        }
+
+        public void Delete(SalesInvoice salesInvoice)
+        {
+            _dataContext.SalesInvoices.Remove(salesInvoice);
+        }
+
+        public List<GetSalesInvoiceDto> GetByCategory(int categoryId)
+        {
+           return _dataContext.SalesInvoices.
+                Where(p => p.Product.Category.Id == categoryId).
+                Select(p => new GetSalesInvoiceDto
+                {
+                    CodeOfProduct = p.CodeOfProduct,
+                    NameOfProduct = p.NameOfProduct,
+                    Number = p.Number,
+                    TotalCost = p.TotalCost,
+                    Date = p.Date,
+                }).ToList();
         }
     }
 }

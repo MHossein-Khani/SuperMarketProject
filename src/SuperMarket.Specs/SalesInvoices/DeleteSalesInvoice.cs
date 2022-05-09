@@ -41,7 +41,51 @@ namespace SuperMarket.Specs.SalesInvoices
         }
 
 
+        [Given("فرض میکنیم یک کالا یا کد '1 وجود دارد")]
+        public void Given()
+        {
+            _category = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(_category));
 
+            _product = ProductFactory.CreatProduct("1", 8, _category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(_product));
+        }
 
+        [And("یک فاکتور فروش با کد کالا '1 وجود دارد")]
+        public void GivenAnd()
+        {
+            _salesInvoice = SalesInvoiceFactory.
+                CreateSalesInvoice(_product.Code, _product.Name, _product.Id);
+            _dataContext.Manipulate(_ => _.SalesInvoices.Add(_salesInvoice));
+        }
+
+        [When("فاکتور فروش با کد کالای '1' را حذف میکنیم")]
+        public void When()
+        {
+            _sut.Delete(_salesInvoice.Id);
+        }
+
+        [Then("فاکتور فروش با کد کالای '1' نباید وجود داشته باشد")]
+        public void Then()
+        {
+            _dataContext.SalesInvoices.Should().HaveCount(0);
+        }
+
+        [And("کالا با کد '1' با عنوان با موجودی '10' باید وجود داشته باشد")]
+        public void ThenAnd()
+        {
+            _product.Inventory.Should().Be(10);
+        }
+
+        [Fact]
+        public void Run()
+        {
+            Given();
+            GivenAnd();
+            When();
+            Then();
+            ThenAnd();
+
+        }
     }
 }

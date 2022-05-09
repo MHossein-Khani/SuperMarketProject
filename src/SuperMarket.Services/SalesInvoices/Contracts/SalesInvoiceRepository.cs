@@ -12,5 +12,9 @@ namespace SuperMarket.Services.SalesInvoices.Contracts
         void Add(SalesInvoice salesInvoice);
         int NumberOfProductInventory(int productId);
         SalesInvoice FindById(int id);
+        void ReduceInventory(int productId, int salesNumber);
+        void AddInventory(int productId, int salesNumber);
+        void Delete(SalesInvoice salesInvoice);
+        List<GetSalesInvoiceDto> GetByCategory(int categoryId);
     }
 }

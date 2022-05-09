@@ -96,10 +96,8 @@ namespace SuperMarket.Specs.SalesInvoices
             "در دسته بندی 'لبنیات' باید وجود داشته باشد")]
         public void ThenAnd()
         {
-            _product.Inventory -= _dto.Number;
-            _dataContext.Manipulate(_ => _.products.Update(_product));
-            var expectedProduct = _dataContext.products.FirstOrDefault();
-            expectedProduct.Inventory.Should().Be(8);
+
+            _product.Inventory.Should().Be(8);
         }
 
         [Fact]

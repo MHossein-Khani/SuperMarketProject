@@ -2,6 +2,7 @@
 using SuperMarket.Infrastructure.Application;
 using SuperMarket.Services.SalesInvoices.Contracts;
 using SuperMarket.Services.SalesInvoices.Exceptions;
+using System.Collections.Generic;
 
 namespace SuperMarket.Services.SalesInvoices
 {
@@ -34,8 +35,25 @@ namespace SuperMarket.Services.SalesInvoices
                 ProductId = dto.ProductId,
             };
 
+            _repository.ReduceInventory(dto.ProductId, dto.Number);
             _repository.Add(salesInvoice);
             _unitOfWork.Commit();
+        }
+
+        public void Delete(int id)
+        {
+            var salesInvoice = _repository.FindById(id);
+            var lastProductId = salesInvoice.ProductId;
+            var lastProductInventory = salesInvoice.Number;
+
+            _repository.Delete(salesInvoice);
+            _repository.AddInventory(lastProductId, lastProductInventory);
+            _unitOfWork.Commit();
+        }
+
+        public List<GetSalesInvoiceDto> GetByCategory(int categoryId)
+        {
+            return _repository.GetByCategory(categoryId);
         }
 
         public void Update(UpdateSalesInvoiceDto dto, int id)
@@ -49,6 +67,9 @@ namespace SuperMarket.Services.SalesInvoices
 
             var salesInvoice = _repository.FindById(id);
 
+            var lastProductId = salesInvoice.ProductId;
+            var lastProductInventory = salesInvoice.Number;
+
             salesInvoice.CodeOfProduct = dto.CodeOfProduct;
             salesInvoice.NameOfProduct = dto.NameOfProduct;
             salesInvoice.Number = dto.Number;
@@ -56,6 +77,8 @@ namespace SuperMarket.Services.SalesInvoices
             salesInvoice.Date = dto.Date;
             salesInvoice.ProductId = dto.ProductId;
 
+            _repository.AddInventory(lastProductId, lastProductInventory);
+            _repository.ReduceInventory(dto.ProductId, dto.Number);
             _unitOfWork.Commit();
         }
     }
