@@ -9,5 +9,7 @@ namespace SuperMarket.Services.PurchaseInvoices.Contracts
     public interface PurchaseInvoiceService
     {
         void Add(AddPurchaseInvoiceDto dto);
+        void Update(UpdatePurchaseInvoiceDto dto, int id);
+        void Delete(int id);
     }
 }

@@ -84,23 +84,23 @@ namespace SuperMarket.Services.SalesInvoices
                 throw new InventoryIsOutOfStockException();
             }
 
-            var salesInvoice = _repository.FindById(id);
+            var purchaseInvoice = _repository.FindById(id);
 
-            var lastProductId = salesInvoice.ProductId;
-            var lastProductInventory = salesInvoice.Number;
+            var lastProductId = purchaseInvoice.ProductId;
+            var lastProductInventory = purchaseInvoice.Number;
 
-            salesInvoice.CodeOfProduct = dto.CodeOfProduct;
-            salesInvoice.NameOfProduct = dto.NameOfProduct;
-            salesInvoice.Number = dto.Number;
-            salesInvoice.TotalCost = dto.TotalCost;
-            salesInvoice.Date = dto.Date;
-            salesInvoice.ProductId = dto.ProductId;
+            purchaseInvoice.CodeOfProduct = dto.CodeOfProduct;
+            purchaseInvoice.NameOfProduct = dto.NameOfProduct;
+            purchaseInvoice.Number = dto.Number;
+            purchaseInvoice.TotalCost = dto.TotalCost;
+            purchaseInvoice.Date = dto.Date;
+            purchaseInvoice.ProductId = dto.ProductId;
 
-            var lastProductInSalesInvoice = _productRepository.FindById(lastProductId);
-            lastProductInSalesInvoice.Inventory += lastProductInventory;
+            var lastProductInPurchaseInvoice = _productRepository.FindById(lastProductId);
+            lastProductInPurchaseInvoice.Inventory += lastProductInventory;
 
-            var newProductInSalesInvoice = _productRepository.FindById(dto.ProductId);
-            newProductInSalesInvoice.Inventory -= dto.Number;
+            var newProductInPurchaseInvoice = _productRepository.FindById(dto.ProductId);
+            newProductInPurchaseInvoice.Inventory -= dto.Number;
 
             _unitOfWork.Commit();
         }

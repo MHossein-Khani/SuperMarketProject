@@ -22,7 +22,7 @@ namespace SuperMarket.Specs.SalesInvoices
     [Feature("",
            AsA = "فروشنده ",
            IWantTo = "فاکتور فروش را حذف کنم",
-           InOrderTo = " بتوانم در فاکتور فروش در محاسبه سود و زیان وجود نداشته باشد"
+           InOrderTo = " در فاکتور فروش در محاسبه سود و زیان وجود نداشته باشد"
            )]
     public class DeleteSalesInvoice : EFDataContextDatabaseFixture
     {

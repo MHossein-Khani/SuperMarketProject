@@ -10,6 +10,8 @@ namespace SuperMarket.Services.PurchaseInvoices.Contracts
     public interface PurchaseInvoiceRepository
     {
         void Add(PurchaseInvoice purchaseInvoice);
+        PurchaseInvoice FindById(int id);
+        void Delete(PurchaseInvoice purchaseInvoice);
 
     }
 }

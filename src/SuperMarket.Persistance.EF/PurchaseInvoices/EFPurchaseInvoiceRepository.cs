@@ -21,5 +21,15 @@ namespace SuperMarket.Persistance.EF.PurchaseInvoices
         {
             _dataContext.PurchaseInvoices.Add(purchaseInvoice);
         }
+
+        public void Delete(PurchaseInvoice purchaseInvoice)
+        {
+            _dataContext.PurchaseInvoices.Remove(purchaseInvoice);
+        }
+
+        public PurchaseInvoice FindById(int id)
+        {
+            return _dataContext.PurchaseInvoices.Find(id);
+        }
     }
 }

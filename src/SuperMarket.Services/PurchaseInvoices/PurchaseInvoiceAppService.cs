@@ -42,5 +42,42 @@ namespace SuperMarket.Services.PurchaseInvoices
             _repository.Add(purchaseInvoice);
             _unitOfWork.Commit();
         }
+
+        public void Delete(int id)
+        {
+            var purchaseInvoice = _repository.FindById(id);
+            var lastProductId = purchaseInvoice.ProductId;
+            var lastProductInventory = purchaseInvoice.Number;
+
+            _repository.Delete(purchaseInvoice);
+
+            var lastProductInSalesInvoice = _productRepository.FindById(lastProductId);
+            lastProductInSalesInvoice.Inventory -= lastProductInventory;
+
+            _unitOfWork.Commit();
+        }
+
+        public void Update(UpdatePurchaseInvoiceDto dto, int id)
+        {
+            var purchaseInvoice = _repository.FindById(id);
+
+            var lastProductId = purchaseInvoice.ProductId;
+            var lastProductInventory = purchaseInvoice.Number;
+
+            purchaseInvoice.CodeOfProduct = dto.CodeOfProduct;
+            purchaseInvoice.NameOfProduct = dto.NameOfProduct;
+            purchaseInvoice.Number = dto.Number;
+            purchaseInvoice.Price = dto.Price;
+            purchaseInvoice.Date = dto.Date;
+            purchaseInvoice.ProductId = dto.ProductId;
+
+            var lastProductInSalesInvoice = _productRepository.FindById(lastProductId);
+            lastProductInSalesInvoice.Inventory -= lastProductInventory;
+
+            var newProductInSalesInvoice = _productRepository.FindById(dto.ProductId);
+            newProductInSalesInvoice.Inventory += dto.Number;
+
+            _unitOfWork.Commit();
+        }
     }
 }
