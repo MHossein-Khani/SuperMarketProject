@@ -73,5 +73,11 @@ namespace SuperMarket.Persistance.EF.SalesInvoices
                     Date = p.Date,
                 }).ToList();
         }
+
+        public bool IsProductUsedInSalesInvoice(int productId)
+        {
+            return _dataContext.SalesInvoices.
+                Any(p => p.ProductId == productId);
+        }
     }
 }

@@ -2,6 +2,7 @@
 using SuperMarket.Infrastructure.Application;
 using SuperMarket.Services.Products.Cantracts;
 using SuperMarket.Services.Products.Exceptions;
+using SuperMarket.Services.SalesInvoices.Contracts;
 using System.Collections.Generic;
 
 namespace SuperMarket.Services.Products
@@ -9,11 +10,14 @@ namespace SuperMarket.Services.Products
     public class ProductAppService : ProductService
     {
         private readonly ProductRepository _productRepository;
+        private readonly SalesInvoiceRepository _salesInvoiceRepository;
         private readonly UnitOfWork _unitOfWork;
 
-        public ProductAppService(ProductRepository productRepository, UnitOfWork unitOfWork)
+        public ProductAppService(ProductRepository productRepository,
+            SalesInvoiceRepository salesInvoiceRepository , UnitOfWork unitOfWork)
         {
             _productRepository = productRepository;
+            _salesInvoiceRepository = salesInvoiceRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -36,7 +40,7 @@ namespace SuperMarket.Services.Products
         {
             var product = _productRepository.FindById(id);
 
-            var IsProductUsed = _productRepository.
+            var IsProductUsed = _salesInvoiceRepository.
                 IsProductUsedInSalesInvoice(id);
             if (IsProductUsed)
             {

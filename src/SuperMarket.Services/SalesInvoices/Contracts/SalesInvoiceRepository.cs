@@ -16,5 +16,6 @@ namespace SuperMarket.Services.SalesInvoices.Contracts
         List<GetSalesInvoiceDto> GetByCategory(int categoryId);
         List<GetSalesInvoiceDto> GetByProduct(int productId);
         List<GetSalesInvoiceDto> GetAll();
+        bool IsProductUsedInSalesInvoice(int productId);
     }
 }

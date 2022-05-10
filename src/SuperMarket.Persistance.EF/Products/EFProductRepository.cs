@@ -71,12 +71,6 @@ namespace SuperMarket.Persistance.EF.Products
             _dataContext.products.Remove(product);
         }
 
-        public bool IsProductUsedInSalesInvoice(int productId)
-        {
-            return _dataContext.SalesInvoices.
-                Any(p => p.ProductId == productId);
-        }
-
         public int NumberOfProductInventory(int productId)
         {
             var product = FindById(productId);

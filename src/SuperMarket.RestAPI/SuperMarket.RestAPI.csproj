@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SuperMarket.Persistance.EF\SuperMarket.Persistance.EF.csproj" />
   </ItemGroup>
 
