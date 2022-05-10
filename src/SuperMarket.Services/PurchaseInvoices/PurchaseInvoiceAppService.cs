@@ -2,11 +2,8 @@
 using SuperMarket.Infrastructure.Application;
 using SuperMarket.Services.Products.Cantracts;
 using SuperMarket.Services.PurchaseInvoices.Contracts;
-using System;
+using SuperMarket.Services.PurchaseInvoices.Exceptions;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SuperMarket.Services.PurchaseInvoices
 {
@@ -38,6 +35,12 @@ namespace SuperMarket.Services.PurchaseInvoices
         public void Delete(int id)
         {
             var purchaseInvoice = _repository.FindById(id);
+
+            if (purchaseInvoice == null)
+            {
+                throw new PurchaseInvoiceDoesNotExistException();
+            }
+
             var lastProductId = purchaseInvoice.ProductId;
             var lastProductInventory = purchaseInvoice.Number;
 
@@ -57,6 +60,11 @@ namespace SuperMarket.Services.PurchaseInvoices
         public void Update(UpdatePurchaseInvoiceDto dto, int id)
         {
             var purchaseInvoice = _repository.FindById(id);
+
+            if(purchaseInvoice == null)
+            {
+                throw new PurchaseInvoiceDoesNotExistException();
+            }
 
             var lastProductId = purchaseInvoice.ProductId;
             var lastProductInventory = purchaseInvoice.Number;

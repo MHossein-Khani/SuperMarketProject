@@ -99,6 +99,23 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
         }
 
         [Fact]
+        public void Throw_exception_if_SalesInvoiceDoesNotExistException_when_update_a_salesInvoice_that_does_not_exist_in_database()
+        {
+            var category = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            var product2 = ProductFactory.CreatProduct("2", 10, category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product2));
+
+            var dto = GenerateUpdateSalesInvoiceDto(product2);
+
+            var fakeId = 100;
+
+            Action expected = () => _sut.Update(dto, fakeId);
+            expected.Should().ThrowExactly<SalesInvoiceDoesNotExistException>();
+        }
+
+        [Fact]
         public void Throw_exception_if_InventoryIsOutOfStockException_when_updating_a_salesInvoice_to_another_product()
         {
             var category = CategoryFactory.CreateCategory("لبنیات");
@@ -139,6 +156,16 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
 
             _dataContext.SalesInvoices.Should().HaveCount(0);
             product.Inventory.Should().Be(10);
+        }
+
+
+        [Fact]
+        public void Throw_exception_if_SalesInvoiceDoesNotExistException_when_Delete_a_SalesInvoice_that_does_not_exist_in_database()
+        {
+            var fakeId = 100;
+
+            Action expected = () => _sut.Delete(fakeId);
+            expected.Should().ThrowExactly<SalesInvoiceDoesNotExistException>();
         }
 
         [Fact]

@@ -8,6 +8,7 @@ using SuperMarket.Persistance.EF.PurchaseInvoices;
 using SuperMarket.Services.Products.Cantracts;
 using SuperMarket.Services.PurchaseInvoices;
 using SuperMarket.Services.PurchaseInvoices.Contracts;
+using SuperMarket.Services.PurchaseInvoices.Exceptions;
 using SuperMarket.Test.Tools;
 using System;
 using System.Collections.Generic;
@@ -75,13 +76,30 @@ namespace SuperMarket.Services.Test.Unit.PurchaseInvoices
                CreateSalesInvoice(product1.Code, product1.Name, product1.Id);
             _dataContext.Manipulate(_ => _.PurchaseInvoices.Add(purchaseInvoice));
 
-            UpdatePurchaseInvoiceDto dto = GeneratePurchaseInvoiceDto(product2, purchaseInvoice);
+            UpdatePurchaseInvoiceDto dto = GeneratePurchaseInvoiceDto(product2);
             _sut.Update(dto, purchaseInvoice.Id);
 
             var expected = _dataContext.PurchaseInvoices.FirstOrDefault();
             expected.CodeOfProduct.Should().Be(dto.CodeOfProduct);
             product1.Inventory.Should().Be(8);
             product2.Inventory.Should().Be(10);
+        }
+
+        [Fact]
+        public void Throw_exception_if_PurchaseInvoiceDoesNotExistException_when_update_a_PurchaseInvoice_that_does_not_exist_in_database()
+        {
+            var category = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            var product2 = ProductFactory.CreatProduct("2", 10, category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product2));
+
+            var dto = GeneratePurchaseInvoiceDto(product2);
+
+            var fakeId = 100;
+
+            Action expected = () => _sut.Update(dto, fakeId);
+            expected.Should().ThrowExactly<PurchaseInvoiceDoesNotExistException>();
         }
 
         [Fact]
@@ -101,6 +119,15 @@ namespace SuperMarket.Services.Test.Unit.PurchaseInvoices
 
             _dataContext.SalesInvoices.Should().HaveCount(0);
             product.Inventory.Should().Be(8);
+        }
+
+        [Fact]
+        public void Throw_exception_if_PurchaseInvoiceDoesNotExistException_when_Delete_a_PurchaseInvoice_that_does_not_exist_in_database()
+        {
+            var fakeId = 100;
+
+            Action expected = () => _sut.Delete(fakeId);
+            expected.Should().ThrowExactly<PurchaseInvoiceDoesNotExistException>();
         }
 
         [Fact]
@@ -124,7 +151,7 @@ namespace SuperMarket.Services.Test.Unit.PurchaseInvoices
             expected.Should().HaveCount(2);
         }
 
-        private UpdatePurchaseInvoiceDto GeneratePurchaseInvoiceDto(Product product2, PurchaseInvoice purchaseInvoice)
+        private UpdatePurchaseInvoiceDto GeneratePurchaseInvoiceDto(Product product2)
         {
             var dto = new UpdatePurchaseInvoiceDto
             {

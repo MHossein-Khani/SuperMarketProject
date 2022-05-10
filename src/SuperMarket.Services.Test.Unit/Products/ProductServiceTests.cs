@@ -90,7 +90,21 @@ namespace SuperMarket.Services.Test.Unit.Products
         }
 
         [Fact]
-        public void Throw_Exception_if_CategoryCodeIsAlreadyExistException_when_updete_a_product_to_a_duplicate_code()
+        public void Throw_exception_if_ProductDoesNotExistException_when_update_a_product_that_does_not_exist_in_database()
+        {
+            var category = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            var dto = GenerateUpdateProductDto(category.Id);
+
+            var fakeId = 100;
+
+            Action expected = () => _sut.Update(dto, fakeId);
+            expected.Should().ThrowExactly<ProductDoesNotExistException>();
+        }
+
+        [Fact]
+        public void Throw_Exception_if_ProductCodeIsAlreadyExistException_when_updete_a_product_to_a_duplicate_code()
         {
             var category = CategoryFactory.CreateCategory("لبنیات");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
@@ -103,7 +117,7 @@ namespace SuperMarket.Services.Test.Unit.Products
 
             var dto = GenerateUpdateProductDto(category.Id);
             Action expected = () => _sut.Update(dto, category.Id);
-            expected.Should().ThrowExactly<CategoryCodeIsAlreadyExistException>();
+            expected.Should().ThrowExactly<ProductCodeIsAlreadyExistException>();
         }
 
         [Fact]
@@ -152,6 +166,15 @@ namespace SuperMarket.Services.Test.Unit.Products
             _sut.Delete(product.Id);
 
             _dataContext.products.Should().HaveCount(0);
+        }
+
+        [Fact]
+        public void Throw_exception_if_ProductDoesNotExistException_when_Delete_a_Product_that_does_not_exist_in_database()
+        {  
+            var fakeId = 100;
+
+            Action expected = () => _sut.Delete(fakeId);
+            expected.Should().ThrowExactly<ProductDoesNotExistException>();
         }
 
         [Fact]

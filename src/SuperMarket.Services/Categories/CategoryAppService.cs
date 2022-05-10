@@ -46,6 +46,11 @@ namespace SuperMarket.Services.Categories
                 throw new InThisCategoryProductIsDefinedException();
             }
 
+            if(category == null)
+            {
+                throw new CategoryDoesNotExistException();
+            }
+
             _categoryRepository.Delete(category);
             _unitOfWork.Commit();
         }

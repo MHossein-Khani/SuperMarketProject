@@ -54,6 +54,12 @@ namespace SuperMarket.Services.SalesInvoices
         public void Delete(int id)
         {
             var salesInvoice = _repository.FindById(id);
+
+            if (salesInvoice == null)
+            {
+                throw new SalesInvoiceDoesNotExistException();
+            }
+
             var lastProductId = salesInvoice.ProductId;
             var lastProductInventory = salesInvoice.Number;
 
@@ -90,6 +96,11 @@ namespace SuperMarket.Services.SalesInvoices
             }
 
             var purchaseInvoice = _repository.FindById(id);
+
+            if(purchaseInvoice == null)
+            {
+                throw new SalesInvoiceDoesNotExistException();
+            }
 
             var lastProductId = purchaseInvoice.ProductId;
             var lastProductInventory = purchaseInvoice.Number;

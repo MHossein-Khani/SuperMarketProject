@@ -47,6 +47,11 @@ namespace SuperMarket.Services.Products
                 throw new ProductUsedInSalesInvoiceException();
             }
 
+            if(product == null)
+            {
+                throw new ProductDoesNotExistException();
+            }
+
             _productRepository.Delete(product);
             _unitOfWork.Commit();
         }
@@ -68,7 +73,12 @@ namespace SuperMarket.Services.Products
             var isCodeExist = _productRepository.IsProductCodeExist(dto.Code);
             if (isCodeExist)
             {
-                throw new CategoryCodeIsAlreadyExistException();
+                throw new ProductCodeIsAlreadyExistException();
+            }
+
+            if (product == null)
+            {
+                throw new ProductDoesNotExistException();
             }
 
             UpdateProductByDto(dto, product);

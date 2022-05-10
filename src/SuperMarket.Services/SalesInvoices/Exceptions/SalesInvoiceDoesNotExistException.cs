@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SuperMarket.Services.Products.Exceptions
+namespace SuperMarket.Services.SalesInvoices.Exceptions
 {
-    public class CategoryCodeIsAlreadyExistException : Exception
+    public class SalesInvoiceDoesNotExistException : Exception
     {
-
     }
 }

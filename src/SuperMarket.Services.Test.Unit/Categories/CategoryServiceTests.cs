@@ -125,6 +125,15 @@ namespace SuperMarket.Services.Test.Unit.Categories
         }
 
         [Fact]
+        public void Throw_exception_if_CategoryDoesNotExistException_when_Delete_a_category_that_does_not_exist_in_database()
+        {
+            var fakeId = 100;
+
+            Action expected = () => _sut.Delete(fakeId);
+            expected.Should().ThrowExactly<CategoryDoesNotExistException>();
+        }
+
+        [Fact]
         public void Throw_exception_if_InThisCategoryProductIsDefinedException_when_deleting_a_category_that_has_product()
         {
             var category = CategoryFactory.CreateCategory("لبنیات");

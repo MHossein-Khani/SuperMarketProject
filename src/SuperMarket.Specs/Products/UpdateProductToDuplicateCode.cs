@@ -89,7 +89,7 @@ namespace SuperMarket.Specs.Products
         [And("خطایی با عنوان ' کالا در این دسته بندی تکراریست' باید رخ دهد")]
         public void ThenAnd()
         {
-            expected.Should().ThrowExactly<CategoryCodeIsAlreadyExistException>();
+            expected.Should().ThrowExactly<ProductCodeIsAlreadyExistException>();
         }
 
         [Fact]
