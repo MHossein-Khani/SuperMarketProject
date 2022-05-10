@@ -1,4 +1,5 @@
 ﻿using SuperMarket.Entities;
+using SuperMarket.Infrastructure.Application;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SuperMarket.Services.SalesInvoices.Contracts
 {
-    public interface SalesInvoiceRepository
+    public interface SalesInvoiceRepository : Repository
     {
         void Add(SalesInvoice salesInvoice);       
         SalesInvoice FindById(int id);

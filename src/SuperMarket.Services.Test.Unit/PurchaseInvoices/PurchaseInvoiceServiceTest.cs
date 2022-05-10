@@ -103,6 +103,27 @@ namespace SuperMarket.Services.Test.Unit.PurchaseInvoices
             product.Inventory.Should().Be(8);
         }
 
+        [Fact]
+        public void GetAll_returns_all_PurchaseInvoice_properly()
+        {
+            var category = CategoryFactory.CreateCategory("لبنیات");
+            _dataContext.Manipulate(_ => _.Categories.Add(category));
+
+            var product1 = ProductFactory.CreatProduct("1", 10, category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product1));
+
+            var product2 = ProductFactory.CreatProduct("1", 5, category.Id);
+            _dataContext.Manipulate(_ => _.products.Add(product2));
+
+            Generate_a_list_of_purchase_invoices(
+               product1.Code, product1.Name, product1.Id,
+               product2.Code, product2.Name, product2.Id);
+
+            var expected = _sut.GetAll();
+
+            expected.Should().HaveCount(2);
+        }
+
         private UpdatePurchaseInvoiceDto GeneratePurchaseInvoiceDto(Product product2, PurchaseInvoice purchaseInvoice)
         {
             var dto = new UpdatePurchaseInvoiceDto
@@ -129,5 +150,35 @@ namespace SuperMarket.Services.Test.Unit.PurchaseInvoices
                 ProductId = product.Id,
             };
         }
+
+        private void Generate_a_list_of_purchase_invoices(
+           string productCode1, string productName1, int productId1,
+            string productCode2, string productName2, int productId2)
+        {
+            var purchaseInvoices = new List<PurchaseInvoice>
+            {
+                new PurchaseInvoice
+                {
+                CodeOfProduct = productCode1,
+                NameOfProduct = productName1,
+                Number = 2,
+                Price = 10000,
+                Date = new DateTime(05 / 02 / 2022),
+                ProductId = productId1,
+                },
+
+                new PurchaseInvoice
+                {
+                CodeOfProduct = productCode2,
+                NameOfProduct = productName2,
+                Number = 2,
+                Price = 10000,
+                Date = new DateTime(07 / 02 / 2022),
+                ProductId = productId2,
+                }
+            };
+            _dataContext.Manipulate(_ => _.PurchaseInvoices.AddRange(purchaseInvoices));
+        }
+
     }
 }

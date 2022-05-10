@@ -31,5 +31,19 @@ namespace SuperMarket.Persistance.EF.PurchaseInvoices
         {
             return _dataContext.PurchaseInvoices.Find(id);
         }
+
+        public List<GetPurchaseInvoiceDto> GetAll()
+        {
+            return _dataContext.PurchaseInvoices.
+                Select(p => new GetPurchaseInvoiceDto
+                {
+                    Id = p.Id,
+                    CodeOfProduct = p.CodeOfProduct,
+                    NameOfProduct = p.NameOfProduct,
+                    Number = p.Number,
+                    Price = p.Price,
+                    Date = p.Date,
+                }).ToList();
+        }
     }
 }

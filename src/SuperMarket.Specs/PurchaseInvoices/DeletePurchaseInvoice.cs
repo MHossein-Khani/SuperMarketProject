@@ -10,8 +10,6 @@ using SuperMarket.Services.PurchaseInvoices;
 using SuperMarket.Services.PurchaseInvoices.Contracts;
 using SuperMarket.Specs.Infrastructure;
 using SuperMarket.Test.Tools;
-using System;
-using System.Linq;
 using Xunit;
 using static SuperMarket.Specs.BDDHelper;
 

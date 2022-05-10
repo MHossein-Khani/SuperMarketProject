@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SuperMarket.Infrastructure.Application
 {
-    public interface Ripository
+    public interface Repository
     {
     }
 }

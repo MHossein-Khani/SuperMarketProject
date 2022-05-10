@@ -57,6 +57,11 @@ namespace SuperMarket.Services.PurchaseInvoices
             _unitOfWork.Commit();
         }
 
+        public List<GetPurchaseInvoiceDto> GetAll()
+        {
+            return _repository.GetAll();
+        }
+
         public void Update(UpdatePurchaseInvoiceDto dto, int id)
         {
             var purchaseInvoice = _repository.FindById(id);

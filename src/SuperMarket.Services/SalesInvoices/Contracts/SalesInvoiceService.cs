@@ -1,9 +1,10 @@
-﻿using SuperMarket.Services.SalesInvoices.Contracts;
+﻿using SuperMarket.Infrastructure.Application;
+using SuperMarket.Services.SalesInvoices.Contracts;
 using System.Collections.Generic;
 
 namespace SuperMarket.Services.SalesInvoices
 {
-    public interface SalesInvoiceService
+    public interface SalesInvoiceService : Service
     {
         void Add(AddSalesInvoiceDto dto);
         void Update(UpdateSalesInvoiceDto dto, int id);

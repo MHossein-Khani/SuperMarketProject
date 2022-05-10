@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using SuperMarket.Infrastructure.Application;
+using System.Collections.Generic;
 
 namespace SuperMarket.Services.Categories.Contracts
 {
-    public interface CategoryService
+    public interface CategoryService : Service
     {
         void Add(AddCategoryDto dto);
         void Update(UpdateCategoryDto dto, int id);

@@ -1,4 +1,5 @@
 ﻿using SuperMarket.Entities;
+using SuperMarket.Infrastructure.Application;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SuperMarket.Services.Categories.Contracts
 {
-    public interface CategoryRepository
+    public interface CategoryRepository : Repository
     {
         void Add(Category category);
         bool IsCategoryNameExist(string name);

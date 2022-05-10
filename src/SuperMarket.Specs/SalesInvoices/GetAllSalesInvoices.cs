@@ -34,6 +34,7 @@ namespace SuperMarket.Specs.SalesInvoices
         private Category _category2;
         private Product _product1;
         private Product _product2;
+        private List<SalesInvoice> _salesInvoices;
         private List<GetSalesInvoiceDto> _expected;
 
         public GetAllSalesInvoices(ConfigurationFixture configuration) : base(configuration)
@@ -66,7 +67,7 @@ namespace SuperMarket.Specs.SalesInvoices
             _product2 = ProductFactory.CreatProduct("2", 15, _category2.Id);
             _dataContext.Manipulate(_ => _.products.Add(_product2));
 
-            Create_a_list_of_sales_invoice();
+            Generate_a_list_of_salesInvoice();
         }
 
         [When("درخواست مشاهده فاکتورهای فروش را بدهیم")]
@@ -96,31 +97,31 @@ namespace SuperMarket.Specs.SalesInvoices
             Then();
         }
 
-        private void Create_a_list_of_sales_invoice()
-        {
-            var salesInvoice = new List<SalesInvoice>
-            {
-                new SalesInvoice
-                {
-                CodeOfProduct = _product1.Code,
-                NameOfProduct = _product1.Name,
-                Number = 2,
-                TotalCost = 10000,
-                Date = new DateTime(05 / 02 / 2022),
-                ProductId = _product1.Id,
-                },
 
-                new SalesInvoice
+        private void Generate_a_list_of_salesInvoice()
+        {
+            _salesInvoices = new List<SalesInvoice>()
+            {
+                new SalesInvoice()
                 {
-                CodeOfProduct = _product2.Code,
-                NameOfProduct = _product2.Name,
-                Number = 4,
-                TotalCost = 10000,
-                Date = new DateTime(05 / 02 / 2022),
-                ProductId = _product2.Id,
+                    CodeOfProduct = _product1.Code,
+                    NameOfProduct = _product1.Name,
+                    Number = 2,
+                    TotalCost = 10000,
+                    Date = new DateTime(05/02/2022),
+                    ProductId = _product1.Id,
                 },
+                new SalesInvoice()
+                {
+                    CodeOfProduct = _product2.Code,
+                    NameOfProduct = _product2.Name,
+                    Number = 2,
+                    TotalCost = 15000,
+                    Date = new DateTime(05/02/2022),
+                    ProductId = _product2.Id,
+                }
             };
-            _dataContext.Manipulate(_ => _.SalesInvoices.AddRange(salesInvoice));
+            _dataContext.Manipulate(_ => _.SalesInvoices.AddRange(_salesInvoices));
         }
 
     }
