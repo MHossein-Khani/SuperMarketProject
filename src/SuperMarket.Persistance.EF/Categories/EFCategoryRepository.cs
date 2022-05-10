@@ -22,10 +22,8 @@ namespace SuperMarket.Persistance.EF.Categories
             _dataContext.Add(category);
         }
 
-        public void Delete(int id)
+        public void Delete(Category category)
         {
-            var category = FindById(id);
-
             _dataContext.Categories.Remove(category);
         }
 

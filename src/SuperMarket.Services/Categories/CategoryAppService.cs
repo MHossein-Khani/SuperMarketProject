@@ -46,7 +46,7 @@ namespace SuperMarket.Services.Categories
                 throw new InThisCategoryProductIsDefinedException();
             }
 
-            _categoryRepository.Delete(id);
+            _categoryRepository.Delete(category);
             _unitOfWork.Commit();
         }
 
