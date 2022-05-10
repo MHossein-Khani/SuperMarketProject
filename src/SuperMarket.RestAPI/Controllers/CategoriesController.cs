@@ -6,11 +6,11 @@ namespace SuperMarket.RestAPI.Controllers
 {
     [Route("api/catgeories")]
     [ApiController]
-    public class CategoryController : Controller
+    public class CategoriesController : Controller
     {
         private readonly CategoryService _service;
 
-        public CategoryController(CategoryService service)
+        public CategoriesController(CategoryService service)
         {
             _service = service;
         }
@@ -21,7 +21,7 @@ namespace SuperMarket.RestAPI.Controllers
             _service.Add(dto);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public void Delete(int id)
         {
             _service.Delete(id);
@@ -38,5 +38,7 @@ namespace SuperMarket.RestAPI.Controllers
         {
             _service.Update(dto, id);
         }
+
+
     }
 }
