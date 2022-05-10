@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SuperMarket.RestAPI.Controllers
 {
-    [Route("api/purchaseInvoice")]
+    [Route("api/purchaseInvoices")]
     [ApiController]
     public class PurchaseInvoicesController : Controller
     {
