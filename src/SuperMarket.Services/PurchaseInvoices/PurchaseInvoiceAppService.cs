@@ -26,15 +26,7 @@ namespace SuperMarket.Services.PurchaseInvoices
 
         public void Add(AddPurchaseInvoiceDto dto)
         {
-            var purchaseInvoice = new PurchaseInvoice
-            {
-                CodeOfProduct = dto.CodeOfProduct,
-                NameOfProduct = dto.NameOfProduct,
-                Number = dto.Number,
-                Price = dto.Price,
-                Date = dto.Date,
-                ProductId = dto.ProductId,
-            };
+            PurchaseInvoice purchaseInvoice = CreatePurchaseInvoice(dto);
 
             var newProductInPurchaseInvoice = _productRepository.FindById(dto.ProductId);
             newProductInPurchaseInvoice.Inventory += dto.Number;
@@ -69,20 +61,44 @@ namespace SuperMarket.Services.PurchaseInvoices
             var lastProductId = purchaseInvoice.ProductId;
             var lastProductInventory = purchaseInvoice.Number;
 
+            UpdatePurchaseInvoiceByDto(dto, purchaseInvoice);
+
+            SetProductInventory(dto, lastProductId, lastProductInventory);
+
+            _unitOfWork.Commit();
+        }
+
+        private void SetProductInventory(UpdatePurchaseInvoiceDto dto, int lastProductId, int lastProductInventory)
+        {
+            var lastProductInSalesInvoice = _productRepository.FindById(lastProductId);
+            lastProductInSalesInvoice.Inventory -= lastProductInventory;
+
+            var newProductInSalesInvoice = _productRepository.FindById(dto.ProductId);
+            newProductInSalesInvoice.Inventory += dto.Number;
+        }
+
+        private static PurchaseInvoice CreatePurchaseInvoice(AddPurchaseInvoiceDto dto)
+        {
+            return new PurchaseInvoice
+            {
+                CodeOfProduct = dto.CodeOfProduct,
+                NameOfProduct = dto.NameOfProduct,
+                Number = dto.Number,
+                Price = dto.Price,
+                Date = dto.Date,
+                ProductId = dto.ProductId,
+            };
+        }
+
+
+        private static void UpdatePurchaseInvoiceByDto(UpdatePurchaseInvoiceDto dto, PurchaseInvoice purchaseInvoice)
+        {
             purchaseInvoice.CodeOfProduct = dto.CodeOfProduct;
             purchaseInvoice.NameOfProduct = dto.NameOfProduct;
             purchaseInvoice.Number = dto.Number;
             purchaseInvoice.Price = dto.Price;
             purchaseInvoice.Date = dto.Date;
             purchaseInvoice.ProductId = dto.ProductId;
-
-            var lastProductInSalesInvoice = _productRepository.FindById(lastProductId);
-            lastProductInSalesInvoice.Inventory -= lastProductInventory;
-
-            var newProductInSalesInvoice = _productRepository.FindById(dto.ProductId);
-            newProductInSalesInvoice.Inventory += dto.Number;
-
-            _unitOfWork.Commit();
         }
     }
 }
