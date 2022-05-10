@@ -17,5 +17,6 @@ namespace SuperMarket.Services.Products.Cantracts
         List<GetProductDto> GetAll();
         void Delete(Product product);
         bool IsProductUsedInSalesInvoice(int productId);
+        int NumberOfProductInventory(int productId);
     }
 }

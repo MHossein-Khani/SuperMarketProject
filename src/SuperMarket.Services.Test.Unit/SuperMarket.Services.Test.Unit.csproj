@@ -25,4 +25,10 @@
 		<ProjectReference Include="..\SuperMarket.Test.Tools\SuperMarket.Test.Tools.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="PurchaseInvoices\PurchaseInvoiceServiceTest.cs">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Compile>
+	</ItemGroup>
+
 </Project>

@@ -76,5 +76,15 @@ namespace SuperMarket.Persistance.EF.Products
             return _dataContext.SalesInvoices.
                 Any(p => p.ProductId == productId);
         }
+
+        public int NumberOfProductInventory(int productId)
+        {
+            var product = FindById(productId);
+
+            var inventory = product.Inventory;
+
+            return inventory;
+        }
+ 
     }
 }

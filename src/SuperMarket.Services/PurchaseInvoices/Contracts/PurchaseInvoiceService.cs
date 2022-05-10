@@ -8,5 +8,6 @@ namespace SuperMarket.Services.PurchaseInvoices.Contracts
 {
     public interface PurchaseInvoiceService
     {
+        void Add(AddPurchaseInvoiceDto dto);
     }
 }

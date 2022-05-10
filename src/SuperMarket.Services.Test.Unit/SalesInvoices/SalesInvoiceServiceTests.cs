@@ -3,7 +3,9 @@ using SuperMarket.Entities;
 using SuperMarket.Infrastructure.Application;
 using SuperMarket.Infrastructure.Test;
 using SuperMarket.Persistance.EF;
+using SuperMarket.Persistance.EF.Products;
 using SuperMarket.Persistance.EF.SalesInvoices;
+using SuperMarket.Services.Products.Cantracts;
 using SuperMarket.Services.SalesInvoices;
 using SuperMarket.Services.SalesInvoices.Contracts;
 using SuperMarket.Services.SalesInvoices.Exceptions;
@@ -20,6 +22,7 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
         private readonly EFDataContext _dataContext;
         private readonly UnitOfWork _unitOfWork;
         private readonly SalesInvoiceRepository _ripository;
+        private readonly ProductRepository _productRepository;
         private readonly SalesInvoiceService _sut;
 
         public SalesInvoiceServiceTests()
@@ -28,7 +31,8 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
                 .CreateDataContext<EFDataContext>();
             _unitOfWork = new EFUnitOfWork(_dataContext);
             _ripository = new EFSalesInvoiceRepository(_dataContext);
-            _sut = new SalesInvoiceAppService(_ripository, _unitOfWork);
+            _productRepository = new EFProductRepository(_dataContext);
+            _sut = new SalesInvoiceAppService(_ripository, _productRepository, _unitOfWork);
         }
 
         [Fact]
@@ -40,7 +44,7 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
             var product = ProductFactory.CreatProduct("1", 10,category.Id);
             _dataContext.Manipulate(_ => _.products.Add(product));
 
-            AddSalesInvoiceDto dto = GenerateAddProductDto(product);
+            AddSalesInvoiceDto dto = GenerateAddSalesInvoiceDto(product);
             _sut.Add(dto);
 
             var expected = _dataContext.SalesInvoices.FirstOrDefault();
@@ -62,7 +66,7 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
             var product = ProductFactory.CreatProduct("1", 0, category.Id);
             _dataContext.Manipulate(_ => _.products.Add(product));
 
-            AddSalesInvoiceDto dto = GenerateAddProductDto(product);
+            AddSalesInvoiceDto dto = GenerateAddSalesInvoiceDto(product);
 
             Action expected = () => _sut.Add(dto);
             _dataContext.SalesInvoices.Should().HaveCount(0);
@@ -210,7 +214,7 @@ namespace SuperMarket.Services.Test.Unit.SalesInvoices
             };
         }
 
-        private static AddSalesInvoiceDto GenerateAddProductDto(Product product)
+        private static AddSalesInvoiceDto GenerateAddSalesInvoiceDto(Product product)
         {
             return new AddSalesInvoiceDto
             {

@@ -3,7 +3,9 @@ using SuperMarket.Entities;
 using SuperMarket.Infrastructure.Application;
 using SuperMarket.Infrastructure.Test;
 using SuperMarket.Persistance.EF;
+using SuperMarket.Persistance.EF.Products;
 using SuperMarket.Persistance.EF.SalesInvoices;
+using SuperMarket.Services.Products.Cantracts;
 using SuperMarket.Services.SalesInvoices;
 using SuperMarket.Services.SalesInvoices.Contracts;
 using SuperMarket.Specs.Infrastructure;
@@ -26,6 +28,7 @@ namespace SuperMarket.Specs.SalesInvoices
         private readonly EFDataContext _dataContext;
         private readonly UnitOfWork _unitOfWork;
         private readonly SalesInvoiceRepository _ripository;
+        private readonly ProductRepository _productRepository;
         private readonly SalesInvoiceService _sut;
         private Category _category;
         private Product _product1;
@@ -38,7 +41,8 @@ namespace SuperMarket.Specs.SalesInvoices
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
             _ripository = new EFSalesInvoiceRepository(_dataContext);
-            _sut = new SalesInvoiceAppService(_ripository, _unitOfWork);
+            _productRepository = new EFProductRepository(_dataContext);
+            _sut = new SalesInvoiceAppService(_ripository, _productRepository, _unitOfWork);
         }
 
         [When("کالایی با کد '1' با عنوان 'شیر کاله' " +

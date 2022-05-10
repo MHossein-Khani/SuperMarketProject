@@ -33,7 +33,7 @@ namespace SuperMarket.Migrations
                             .WithColumn("Number").AsInt32().NotNullable()
                             .WithColumn("Price").AsInt32().NotNullable()
                             .WithColumn("Date").AsDate()
-                            .WithColumn("ProdutId").AsInt32().NotNullable()
+                            .WithColumn("ProductId").AsInt32().NotNullable()
                             .ForeignKey("FK_PurchaseInvoices_Products", "Products", "Id");
         }
 

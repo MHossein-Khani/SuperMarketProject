@@ -4,10 +4,11 @@ using SuperMarket.Infrastructure.Application;
 using SuperMarket.Infrastructure.Test;
 using SuperMarket.Persistance.EF;
 using SuperMarket.Persistance.EF.Products;
-using SuperMarket.Persistance.EF.SalesInvoices;
+using SuperMarket.Persistance.EF.PurchaseInvoices;
+using SuperMarket.Services.Products;
 using SuperMarket.Services.Products.Cantracts;
-using SuperMarket.Services.SalesInvoices;
-using SuperMarket.Services.SalesInvoices.Contracts;
+using SuperMarket.Services.PurchaseInvoices;
+using SuperMarket.Services.PurchaseInvoices.Contracts;
 using SuperMarket.Specs.Infrastructure;
 using SuperMarket.Test.Tools;
 using System;
@@ -15,32 +16,32 @@ using System.Linq;
 using Xunit;
 using static SuperMarket.Specs.BDDHelper;
 
-namespace SuperMarket.Specs.SalesInvoices
+namespace SuperMarket.Specs.PurchaseInvoices
 {
-    [Scenario("فروش کالا")]
+    [Scenario("خرید کالا")]
     [Feature("",
            AsA = "فروشنده ",
-           IWantTo = "کالا را به فروش برسانم",
-           InOrderTo = " بتوانم سود و زیان را محاسبه کنم"
+           IWantTo = "خرید کالا داشته باشم ",
+           InOrderTo = " بتوانم موجودی کالای خود را افزایش دهم"
            )]
-    public class AddSalesInvoice : EFDataContextDatabaseFixture
+    public class AddPurchaseInvoice : EFDataContextDatabaseFixture
     {
         private readonly EFDataContext _dataContext;
         private readonly UnitOfWork _unitOfWork;
-        private readonly SalesInvoiceRepository _ripository;
+        private readonly PurchaseInvoiceRepository _ripository;
         private readonly ProductRepository _productRepository;
-        private readonly SalesInvoiceService _sut;
+        private readonly PurchaseInvoiceService _sut;
         private Category _category;
         private Product _product;
-        private AddSalesInvoiceDto _dto;
+        private AddPurchaseInvoiceDto _dto;
 
-        public AddSalesInvoice(ConfigurationFixture configuration) : base(configuration)
+        public AddPurchaseInvoice(ConfigurationFixture configuration) : base(configuration)
         {
             _dataContext = CreateDataContext();
             _unitOfWork = new EFUnitOfWork(_dataContext);
-            _ripository = new EFSalesInvoiceRepository(_dataContext);
+            _ripository = new EFPurchaseInvoiceRepository(_dataContext);
             _productRepository = new EFProductRepository(_dataContext);
-            _sut = new SalesInvoiceAppService(_ripository, _productRepository, _unitOfWork);
+            _sut = new PurchaseInvoiceAppService(_ripository, _productRepository, _unitOfWork);
         }
 
         [Given("کالایی با کد '1' با عنوان 'شیر کاله'  " +
@@ -60,47 +61,46 @@ namespace SuperMarket.Specs.SalesInvoices
         {
         }
 
-        [When("یک کالا با کد کالا '1' " +
-            "با نام کالا 'شیر کاله' با تعداد'2' با قیمت واحد'5000' " +
-            "با قیمت کل '10000'  با تاریخ '2022 / 02 / 05' " +
-            "با نام مشتری 'حسین خانی' به فروش میرسد")]
+        [When(" کالا با کد کالا ‘1’ با نام کالا ‘شیر کاله’ " +
+            "با تعداد ‘4’ با قیمت واحد’5000’  " +
+            "با تاریخ ‘2022/02/05’  خریداری میشود")]
         public void When()
         {
-            _dto = new AddSalesInvoiceDto
+            _dto = new AddPurchaseInvoiceDto()
             {
                 CodeOfProduct = _product.Code,
                 NameOfProduct = _product.Name,
                 Number = 2,
-                TotalCost = 10000,
-                Date = new DateTime(05 / 02 / 2022),
+                Price = 10000,
+                Date = new DateTime(05 / 05 / 2022),
                 ProductId = _product.Id,
             };
             _sut.Add(_dto);
         }
 
-        [Then(" یک فاکتور فروش با کد کالا '1' با نام کالا 'شیر کاله' " +
-            "با تعداد'2' با قیمت واحد'5000' با قیمت کل '10000'  " +
-            "با تاریخ '2022 / 02 / 05' با نام مشتری 'حسین خانی' " +
-            "در فهرست فاکتورهای فروش باید وجود داشته باشد")]
+        [Then("یک فاکتور خرید کالا با کد کالا ‘1’ " +
+            "با نام کالا ‘شیر کاله’ با تعداد ‘4’ " +
+            "با قیمت واحد’5000’  با تاریخ ‘2022/02/05’   " +
+            "در فهرست فاکتورهای خرید باید وجود داشته باشد")]
         public void Then()
         {
-            var expected = _dataContext.SalesInvoices.FirstOrDefault();
+            var expected = _dataContext.PurchaseInvoices.FirstOrDefault();
             expected.Should().NotBeNull();
             expected.CodeOfProduct.Should().Be(_dto.CodeOfProduct);
             expected.NameOfProduct.Should().Be(_dto.NameOfProduct);
             expected.Number.Should().Be(_dto.Number);
+            expected.Price.Should().Be(_dto.Price);
             expected.Date.Should().Be(_dto.Date);
             expected.ProductId.Should().Be(_dto.ProductId);
-
         }
 
-        [And("کالا با کد '1' " +
-            "با عنوان 'شیر کاله' با حداقل موجودی '5' " +
-            "با قیمت فروش '5000' با موجودی '8' " +
-            "در دسته بندی 'لبنیات' باید وجود داشته باشد")]
+        [And("کالا با کد ‘1’ " +
+            "با عنوان ‘شیر کاله’ با حداقل موجودی ‘5’ " +
+            "با قیمت فروش ‘5000’ با موجودی ‘10’ " +
+            "در دسته بندی ‘لبنیات’ باید وجود داشته باشد")]
         public void ThenAnd()
         {
-            _product.Inventory.Should().Be(8);
+            _product.Inventory.Should().Be(12);
         }
 
         [Fact]

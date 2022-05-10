@@ -9,11 +9,8 @@ namespace SuperMarket.Services.SalesInvoices.Contracts
 {
     public interface SalesInvoiceRepository
     {
-        void Add(SalesInvoice salesInvoice);
-        int NumberOfProductInventory(int productId);
+        void Add(SalesInvoice salesInvoice);       
         SalesInvoice FindById(int id);
-        void ReduceInventory(int productId, int salesNumber);
-        void AddInventory(int productId, int salesNumber);
         void Delete(SalesInvoice salesInvoice);
         List<GetSalesInvoiceDto> GetByCategory(int categoryId);
         List<GetSalesInvoiceDto> GetByProduct(int productId);
