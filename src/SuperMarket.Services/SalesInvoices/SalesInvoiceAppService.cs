@@ -30,7 +30,18 @@ namespace SuperMarket.Services.SalesInvoices
                 throw new TheNumberOfProductsIsLessThanTheNumberRequestedException();
             }
 
-            var salesInvoice = new SalesInvoice
+            SalesInvoice salesInvoice = CreateSalesInvoice(dto);
+
+            var newProductInSalesInvoice = _productRepository.FindById(dto.ProductId);
+            newProductInSalesInvoice.Inventory -= dto.Number;
+
+            _repository.Add(salesInvoice);
+            _unitOfWork.Commit();
+        }
+
+        private static SalesInvoice CreateSalesInvoice(AddSalesInvoiceDto dto)
+        {
+            return new SalesInvoice
             {
                 CodeOfProduct = dto.CodeOfProduct,
                 NameOfProduct = dto.NameOfProduct,
@@ -38,12 +49,6 @@ namespace SuperMarket.Services.SalesInvoices
                 Date = dto.Date,
                 ProductId = dto.ProductId,
             };
-
-            var newProductInSalesInvoice = _productRepository.FindById(dto.ProductId);
-            newProductInSalesInvoice.Inventory -= dto.Number;
-
-            _repository.Add(salesInvoice);
-            _unitOfWork.Commit();
         }
 
         public void Delete(int id)
@@ -89,20 +94,30 @@ namespace SuperMarket.Services.SalesInvoices
             var lastProductId = purchaseInvoice.ProductId;
             var lastProductInventory = purchaseInvoice.Number;
 
+            UpdateSalesInvoiceByDto(dto, purchaseInvoice);
+
+            SetProductInventory(dto, lastProductId, lastProductInventory);
+
+            _unitOfWork.Commit();
+        }
+
+        private void SetProductInventory(UpdateSalesInvoiceDto dto, int lastProductId, int lastProductInventory)
+        {
+            var lastProductInPurchaseInvoice = _productRepository.FindById(lastProductId);
+            lastProductInPurchaseInvoice.Inventory += lastProductInventory;
+
+            var newProductInPurchaseInvoice = _productRepository.FindById(dto.ProductId);
+            newProductInPurchaseInvoice.Inventory -= dto.Number;
+        }
+
+        private static void UpdateSalesInvoiceByDto(UpdateSalesInvoiceDto dto, SalesInvoice purchaseInvoice)
+        {
             purchaseInvoice.CodeOfProduct = dto.CodeOfProduct;
             purchaseInvoice.NameOfProduct = dto.NameOfProduct;
             purchaseInvoice.Number = dto.Number;
             purchaseInvoice.TotalCost = dto.TotalCost;
             purchaseInvoice.Date = dto.Date;
             purchaseInvoice.ProductId = dto.ProductId;
-
-            var lastProductInPurchaseInvoice = _productRepository.FindById(lastProductId);
-            lastProductInPurchaseInvoice.Inventory += lastProductInventory;
-
-            var newProductInPurchaseInvoice = _productRepository.FindById(dto.ProductId);
-            newProductInPurchaseInvoice.Inventory -= dto.Number;
-
-            _unitOfWork.Commit();
         }
     }
 }
