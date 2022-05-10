@@ -19,15 +19,7 @@ namespace SuperMarket.Services.Products
 
         public void Add(AddProductDto dto)
         {
-            var product = new Product
-            {
-                Code = dto.Code,
-                Name = dto.Name,
-                MinimumInventory = dto.MinimumInventory,
-                Price = dto.Price,
-                Inventory = dto.Inventory,
-                CategoryId = dto.CategoryId,
-            };
+            Product product = CreateProduct(dto);
 
             var isProductExist = _productRepository.
                 IsProductCodeExist(dto.Code);
@@ -75,14 +67,33 @@ namespace SuperMarket.Services.Products
                 throw new CategoryCodeIsAlreadyExistException();
             }
 
+            UpdateProductByDto(dto, product);
+
+            _unitOfWork.Commit();
+        }
+
+        private static void UpdateProductByDto(UpdateProductDto dto, Product product)
+        {
             product.Code = dto.Code;
             product.Name = dto.Name;
             product.MinimumInventory = dto.MinimumInventory;
             product.Price = dto.Price;
             product.Inventory = dto.Inventory;
             product.CategoryId = dto.CategoryId;
-
-            _unitOfWork.Commit();
         }
+
+        private static Product CreateProduct(AddProductDto dto)
+        {
+            return new Product
+            {
+                Code = dto.Code,
+                Name = dto.Name,
+                MinimumInventory = dto.MinimumInventory,
+                Price = dto.Price,
+                Inventory = dto.Inventory,
+                CategoryId = dto.CategoryId,
+            };
+        }
+
     }
 }
