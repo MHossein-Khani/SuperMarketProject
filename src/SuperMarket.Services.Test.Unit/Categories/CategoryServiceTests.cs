@@ -34,13 +34,10 @@ namespace SuperMarket.Services.Test.Unit.Categories
         [Fact]
         public void Add_adds_category_properly()
         {
-            var dto = new AddCategoryDto
-            {
-                Name = "لبنیات"
-            };
+            var dto = GenerateCategoryDto("لبنیات");
 
             _sut.Add(dto);
-            
+
             _dataContext.Categories.Should().Contain(p => p.Name == dto.Name);
         }
 
@@ -50,10 +47,7 @@ namespace SuperMarket.Services.Test.Unit.Categories
             var category = CategoryFactory.CreateCategory("لبنیات");
             _dataContext.Manipulate(_ => _.Categories.Add(category));
 
-            var dto = new AddCategoryDto
-            {
-                Name = category.Name,
-            };
+            var  dto = GenerateCategoryDto(category.Name);
 
             Action expected = () => _sut.Add(dto);
             expected.Should().ThrowExactly<CategoryNameIsAlreadyExistException>();
@@ -143,6 +137,15 @@ namespace SuperMarket.Services.Test.Unit.Categories
 
             expected.Should().ThrowExactly<InThisCategoryProductIsDefinedException>();
         }
+
+        private static AddCategoryDto GenerateCategoryDto(string name)
+        {
+            return new AddCategoryDto
+            {
+                Name = "لبنیات"
+            };
+        }
+
 
         private void CreateCategoriesInDataBase()
         {
